@@ -149,6 +149,18 @@ main {
   animation: glow 2s infinite alternate;
 }
 
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column; /* Apila los enlaces verticalmente */
+    align-items: center; /* Centra los enlaces */
+    padding: 1rem 0;
+  }
+
+  .navbar-link {
+    margin: 0.5rem 0; /* Añade espacio vertical entre enlaces */
+  }
+}
+
 
 
 
@@ -187,3 +199,21 @@ body {
 }
 
 
+/* En src/App.css, al final de todo */
+
+@media (max-width: 768px) {
+  /* Reduce el tamaño del título del Home */
+  .home-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  /* Reduce el tamaño del párrafo del Home */
+  .home-content p {
+    font-size: 1rem;
+  }
+
+  /* Ajusta el padding de las páginas para que no sea tan grande */
+  main {
+    padding: 0.5rem !important; /* Usamos !important para sobreescribir el estilo en línea */
+  }
+}

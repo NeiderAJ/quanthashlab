@@ -224,3 +224,26 @@ p.final-note {
   background-color: #7dd3fc;
   transform: translateY(-2px);
 }
+
+/* En LecturaDetalle.css, al final de todo */
+
+@media (max-width: 768px) {
+  .lectura-detalle-container {
+    padding: 1rem; /* Reduce el padding interno */
+  }
+
+  .lectura-detalle-header {
+    flex-direction: column; /* Apila los botones y el título */
+    gap: 1rem;
+  }
+
+  .lectura-detalle-header h1 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .lectura-contenido h1 { font-size: 1.6rem; }
+  .lectura-contenido h2 { font-size: 1.3rem; }
+  .lectura-contenido h3 { font-size: 1.1rem; }
+}
+
