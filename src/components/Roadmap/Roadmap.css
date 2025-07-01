@@ -1,0 +1,63 @@
+/* src/components/Roadmap/Roadmap.css */
+
+/* Hacemos que los estilos dependan del tema del contenedor padre */
+
+/* --- TEMA CLARO (POR DEFECTO) --- */
+.lectura-detalle-container.light .roadmap-h1, 
+.lectura-detalle-container.light .roadmap-h2, 
+.lectura-detalle-container.light .roadmap-h3 {
+  color: #0c4a6e;
+}
+.lectura-detalle-container.light .roadmap-h1 { border-bottom: 2px solid #0ea5e9; }
+.lectura-detalle-container.light .roadmap-blockquote { border-left-color: #facc15; background-color: #fffbeb; }
+.lectura-detalle-container.light .styled-list-container h4 { color: #0284c7; }
+
+
+/* --- TEMA OSCURO --- */
+.lectura-detalle-container.dark .roadmap-h1, 
+.lectura-detalle-container.dark .roadmap-h2, 
+.lectura-detalle-container.dark .roadmap-h3 {
+  color: #7dd3fc;
+}
+.lectura-detalle-container.dark .roadmap-h1 { border-bottom-color: #38bdf8; }
+.lectura-detalle-container.dark .roadmap-blockquote { border-left-color: #f0e68c; background-color: rgba(240, 230, 140, 0.1); color: #e2e8f0; }
+.lectura-detalle-container.dark .styled-list-container h4 { color: #38bdf8; }
+.lectura-detalle-container.dark p { color: #e2e8f0; }
+.lectura-detalle-container.dark .content-list-styled { color: #e2e8f0; }
+
+/* Estilos base (independientes del tema) */
+.roadmap-h1, .roadmap-h2, .roadmap-h3 {
+  font-family: 'Cambria', 'Georgia', serif;
+}
+.roadmap-h1 { font-size: 2.2rem; padding-bottom: 0.5rem; margin: 0 0 1.5rem 0; }
+.roadmap-h2 { font-size: 1.8rem; margin: 2rem 0 1rem 0; }
+.roadmap-h3 { font-size: 1.4rem; font-style: italic; margin: 1.5rem 0 1rem 0; }
+
+.roadmap-blockquote {
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+
+.styled-list-container h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.content-list-styled {
+  list-style-type: '■ ';
+  padding-left: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+p.author-line {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #64748b;
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+}
+.lectura-detalle-container.dark p.author-line {
+  color: #94a3b8;
+}

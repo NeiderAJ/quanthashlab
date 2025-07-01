@@ -1,0 +1,599 @@
+
+
+// ========================================
+// ARCHIVO: App.css
+// ========================================
+/* App.css */
+
+.lecturas-page {
+  padding: 2rem;
+  text-align: center;
+}
+
+.lecturas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.lectura-card {
+  background-color: #334155;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+.lectura-card:hover {
+  transform: translateY(-5px);
+}
+
+.lectura-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* HOME PAGE */
+.home-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 2rem;
+  background-color: #1e1e1e;
+  color: #f8fafc;
+  min-height: 60vh;             /* 👈 Ajusta altura mínima para centrar mejor */
+}
+
+.home-content h2 {
+  font-size: 2.5rem;
+  font-family: Georgia, serif;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);    /* 👈 Le da glow sutil como el banner */
+}
+
+.home-content p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  line-height: 1.6;
+  font-family: Georgia, serif;
+  font-style: italic;
+}
+
+
+/* NAVBAR */
+.navbar {
+  background-color: #232e3e;
+  display: flex;
+  justify-content: center;
+  padding: 0.1rem 0;
+}
+
+.navbar-link {
+  margin: 0 1rem;
+  color: #f8fafc;
+  font-family: 'Cambria', serif;
+  font-style: italic;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+  color: #38bdf8;    /* bonito azul claro al pasar el mouse */
+}
+
+
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;    /* 👈 Esto hace la magia */
+}
+
+main {
+  flex: 1;               /* 👈 Esto permite al contenido ocupar el espacio libre */
+}
+
+
+.banner-container {
+  position: relative;
+  width: 100vw;               /* 100% ancho de la ventana */
+  height: 35vh;              /* más delgado, ajustable */
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.banner-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.banner-text {
+  position: absolute;
+  top: 90%;
+  left: 15%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  text-align: left;
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+  50% {
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #0ff, 0 0 30px #0ff;
+  }
+  100% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+}
+
+
+.banner-text p {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 400;
+  color: #ffffff;
+  font-family: 'Cambria', serif;
+  font-style: italic;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+  letter-spacing: 2px;
+  animation: glow 2s infinite alternate;
+}
+
+
+
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* NUEVO: asegúrate que #root también esté sin márgenes ni relleno */
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+/* Opcional extra: elimina cualquier scroll inesperado */
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+}
+
+
+/* Corregir efecto de centrar body */
+body {
+  display: block !important;
+  place-items: unset !important;
+  min-height: auto !important;
+}
+
+
+
+
+// ========================================
+// ARCHIVO: App.jsx
+// ========================================
+// src/App.jsx
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from "./components/Layout";
+import Home from "./components/Home";      
+import LecturasPage from "./components/Lecturas/LecturasPage";
+
+
+
+function App() {
+  return (
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />   
+          <Route path="/lecturas" element={<LecturasPage />} /> 
+          <Route path="/academia" element={<h2>Academia Crypto</h2>} />
+          <Route path="/simulaciones" element={<h2>Simulaciones</h2>} />
+          <Route path="/econofisica" element={<h2>EconoFísica</h2>} />
+          <Route path="/nosotros" element={<h2>Nosotros</h2>} />
+        </Routes>
+      </Layout>
+    </Router>
+  );
+}
+
+export default App;
+
+
+// ========================================
+// ARCHIVO: components\Banner.jsx
+// ========================================
+// src/components/Banner.jsx
+import React from 'react';
+import videoBanner from '../assets/video.mp4'; // Ajusta la ruta a tu video
+
+const Banner = () => {
+  return (
+    <div className="banner-container">
+      <video autoPlay loop muted className="banner-video" >
+        <source src={videoBanner} type="video/mp4" />
+        Tu navegador no soporta videos.
+      </video>
+
+      <div className="banner-text">
+        <p> From Physics to Finance </p>
+      </div>
+     
+    </div>
+  );
+};
+
+export default Banner;
+
+
+// ========================================
+// ARCHIVO: components\Footer.jsx
+// ========================================
+// src/components/Footer.jsx
+import React from 'react';
+
+const Footer = () => {
+  return (
+    <footer style={styles.footer}>
+      <p>© 2025 QuantHashLab. Todos los derechos reservados.</p>
+    </footer>
+  );
+};
+
+const styles = {
+  footer: {
+    backgroundColor: '#1e293b',
+    color: '#f1f5f9',
+    textAlign: 'center',
+    padding: '1rem',
+    marginTop: '2rem',
+  }
+};
+
+export default Footer;
+
+
+// ========================================
+// ARCHIVO: components\Home.jsx
+// ========================================
+// src/components/Home.jsx
+import React from 'react';
+
+const Home = () => {
+  return (
+    <div className="home-content">
+      <h2>Bienvenido a QuantHashLab</h2>
+      <p>
+        Un espacio donde convergen las matemáticas, la física, las finanzas cuantitativas, el ML y la AI para comprender y revolucionar la economía descentralizada.
+        Aquí podrás encontrar recursos, simulaciones y un laboratorio de ideas para explorar el fascinante mundo de las finanzas digitales.
+        <br />
+        <br />
+        
+Si te apasionan finanzas digitales y el blockchain, este es tu laboratorio!
+      </p>
+    </div>
+  );
+};
+
+export default Home;
+
+
+// ========================================
+// ARCHIVO: components\Layout.jsx
+// ========================================
+// src/components/Layout.jsx
+import Banner from "./Banner";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+
+const Layout = ({ children }) => {
+  return (
+    <div className="layout">
+      <Banner />
+      <Navbar />
+      <main style={{ padding: "1rem" }}>{children}</main>
+      <Footer />
+    </div>
+  );
+};
+
+export default Layout;
+
+
+// ========================================
+// ARCHIVO: components\Lecturas\data\lecturasData.js
+// ========================================
+import imag1 from './images/imag1.jpg';
+import imag2 from './images/imag2.jpg';
+import imag3 from './images/imag3.jpg';
+import imag4 from './images/imag4.jpg';
+
+const lecturas = [
+  {
+    id: 1,
+    titulo: "Quantitative Crypto",
+    descripcion: "¿Es posible aplicar los métodos cuantitativos al mundo DeFi?",
+    imagen: imag1
+  },
+  {
+    id: 2,
+    titulo: "Biblioteca Quant",
+    descripcion: "Links a libros esenciales en la Econofísica.",
+    imagen: imag2
+  },
+  {
+    id: 3,
+    titulo: "Geometría diferencial y Análisis Cuantitativo",
+    descripcion: "Se discute el libro 'Analysis, Geometry, and Modeling in Finance' de Henry-Labordère.",
+    imagen: imag3
+  },
+  {
+    id: 4,
+    titulo: "Física, modelado y finanzas cuantitativas",
+    descripcion: "Econofísica, métodos cuantitativos y DeFi.",
+    imagen: imag4
+  },
+  // Puedes agregar más objetos aquí si lo deseas
+];
+
+export default lecturas;
+
+
+// ========================================
+// ARCHIVO: components\Lecturas\LecturaCard.jsx
+// ========================================
+import React from 'react';
+import './Lecturas.css'; // Importa estilos
+
+const LecturaCard = ({ titulo, descripcion, imagen }) => {
+  return (
+    <div className="lectura-card">
+      <img src={imagen} alt={titulo} className="lectura-img" />
+      <h3 className="lectura-title">{titulo}</h3>
+      <p className="lectura-desc">{descripcion}</p>
+    </div>
+  );
+};
+
+export default LecturaCard;
+
+
+// ========================================
+// ARCHIVO: components\Lecturas\Lecturas.css
+// ========================================
+.lecturas-page {
+  padding: 2rem;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  min-height: 100vh;
+}
+
+.lecturas-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  border-bottom: 2px solid #38bdf8;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.lecturas-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));  /*minmax(220px, 1fr) → para cuántas tarjetas entran por fila.*/
+}
+
+.lectura-card {
+  width: 100%;
+  max-width: 280px;        /* ← Limita el ancho */
+  height: 320px;           /* ← Altura fija */
+  background-color: #1e293b;
+  border-radius: 1rem;
+  padding: 0.7rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.lectura-card:hover {
+  transform: scale(1.03);
+}
+
+.lectura-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;       /* ← recorta sin deformar */
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+
+.lectura-title {
+  font-size: 1.1rem;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.lectura-desc {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+
+// ========================================
+// ARCHIVO: components\Lecturas\LecturasPage.jsx
+// ========================================
+import React from 'react';
+import lecturas from './data/lecturasData';
+import LecturaCard from './LecturaCard';
+import './Lecturas.css';
+
+const LecturasPage = () => {
+  return (
+    <div className="lecturas-page">
+      <h2 className="lecturas-header">Lecturas Quant</h2>
+      <div className="lecturas-grid">
+        {lecturas.map((l) => (
+          <LecturaCard key={l.id} {...l} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default LecturasPage;
+
+
+// ========================================
+// ARCHIVO: components\Navbar.jsx
+// ========================================
+// src/components/Navbar.jsx
+import React from 'react';
+
+import { Link } from 'react-router-dom';
+
+
+const Navbar = () => {
+  return (
+    <nav className="navbar" >
+      <Link className="navbar-link" to="/">Inicio</Link>
+      <Link className="navbar-link" to="/lecturas">Lecturas Quant</Link>
+      <Link className="navbar-link" to="/academia">Academia Crypto</Link>
+      <Link className="navbar-link" to="/simulaciones">Simulaciones</Link>
+      <Link className="navbar-link" to="/econofisica">EconoFísica</Link>
+      <Link className="navbar-link" to="/nosotros">Nosotros</Link>
+    </nav>
+  );
+};
+
+export default Navbar;
+
+
+// ========================================
+// ARCHIVO: index.css
+// ========================================
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+/*Este es el body recomendado por gpt*/
+body {
+  margin: 0;
+  /* display: flex;   ← elimina esta línea */
+  /* place-items: center; ← y esta */
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+
+/* este es el original
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}*/
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+
+// ========================================
+// ARCHIVO: main.jsx
+// ========================================
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)

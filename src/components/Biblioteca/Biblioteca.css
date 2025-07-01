@@ -1,0 +1,106 @@
+/* src/components/Biblioteca/Biblioteca.css */
+
+/* Estilos para la página principal de la biblioteca (los añadiremos más tarde) */
+.biblioteca-page {
+  padding: 2rem;
+  background-color: #0f172a;
+}
+
+.biblioteca-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  color: #38bdf8;
+  border-bottom: 2px solid #38bdf8;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.biblioteca-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Una columna por defecto para móviles */
+  gap: 2.5rem;
+}
+
+/* --- Estilos para cada tarjeta de libro --- */
+.libro-card {
+  display: flex;
+  flex-direction: column; /* Apilado en móviles */
+  gap: 1.5rem;
+  background-color: #1e293b;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  color: #e2e8f0;
+  max-width: 800px; /* Ancho máximo de la tarjeta */
+  margin: 0 auto; /* Centra las tarjetas en el grid */
+}
+
+/* Portada del libro */
+.libro-card-portada {
+  flex-shrink: 0;
+  text-align: center; /* Centra la imagen en móviles */
+}
+
+.libro-card-portada img {
+  width: 150px; /* Ancho fijo para la portada */
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Información del libro */
+.libro-card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.libro-titulo {
+  font-size: 1.4rem;
+  color: #38bdf8;
+  margin-bottom: 0.25rem;
+}
+
+.libro-autor {
+  font-size: 1rem;
+  font-style: italic;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.libro-descripcion {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  flex-grow: 1; /* Permite que la descripción ocupe el espacio disponible */
+  margin-bottom: 1.5rem;
+}
+
+/* Botón de Descarga */
+.libro-descargar-btn {
+  display: inline-block;
+  background-color: #38bdf8;
+  color: #0f172a;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  align-self: flex-start; /* Alinea el botón a la izquierda */
+}
+
+.libro-descargar-btn:hover {
+  background-color: #7dd3fc;
+  transform: translateY(-2px);
+}
+
+/* --- Media Query para pantallas más grandes (Desktop) --- */
+@media (min-width: 768px) {
+  .libro-card {
+    flex-direction: row; /* Lado a lado en pantallas grandes */
+  }
+
+  .libro-card-portada {
+    text-align: left;
+  }
+}

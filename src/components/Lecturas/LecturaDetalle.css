@@ -1,0 +1,226 @@
+/* src/components/Lecturas/LecturaDetalle.css */
+
+/* --- Contenedor Principal y Temas --- */
+
+/* Estilos base para el contenedor */
+.lectura-detalle-container {
+  max-width: 900px; /* Aumentamos el ancho para aprovechar más espacio */
+  margin: 2rem auto;
+  padding: 2rem 3rem; /* Más padding horizontal */
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para el cambio de tema */
+}
+
+/* TEMA OSCURO (Por defecto) */
+.lectura-detalle-container.dark {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+.lectura-detalle-container.dark h1 {
+  color: #38bdf8;
+}
+
+.lectura-detalle-container.dark .katex-display {
+  background-color: #1e293b;
+}
+
+/* TEMA CLARO */
+.lectura-detalle-container.light {
+  background-color: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+}
+
+.lectura-detalle-container.light h1 {
+  color: #0284c7; /* Un azul un poco más oscuro para mejor contraste en blanco */
+}
+
+.lectura-detalle-container.light .lectura-contenido p {
+  color: #334155; /* Un gris oscuro para el texto, menos duro que el negro puro */
+}
+
+.lectura-detalle-container.light .katex-display {
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+}
+
+
+/* --- Cabecera (Header) --- */
+.lectura-detalle-header {
+  display: flex; /* ¡La clave para alinear los elementos! */
+  justify-content: space-between; /* Empuja los elementos a los extremos */
+  align-items: center; /* Centra verticalmente los elementos */
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 1rem;
+}
+
+.lectura-detalle-container.light .lectura-detalle-header {
+  border-bottom-color: #cbd5e1;
+}
+
+/* Contenido principal de la cabecera (thumbnail + título) */
+.header-main-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Espacio entre la imagen y el título */
+}
+
+/* Título principal H1 */
+.lectura-detalle-header h1 {
+  font-size: 1.9rem;
+  margin: 0; /* Reseteamos márgenes del h1 */
+  padding: 0;
+  border: none; /* Quitamos el borde que tenía antes */
+  position: static; /* Quitamos el posicionamiento anterior */
+  transform: none; /* Quitamos la transformación anterior */
+}
+
+/* Imagen en miniatura (Thumbnail) */
+.lectura-thumbnail-img {
+  width: 80px;  /* <-- Puedes ajustar este valor (p.ej. 60px, 100px) */
+  height: 80px; /* <-- Y este para cambiar el tamaño */
+  object-fit: cover;
+  border-radius: 8px; /* Un poco redondeado */
+  flex-shrink: 0; /* Evita que la imagen se encoja */
+}
+
+/* --- Botones --- */
+.back-button, .theme-toggle-button {
+  background-color: #334155;
+  color: #e2e8f0;
+  border: none;
+  padding: 0.3rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  white-space: nowrap; /* Evita que el texto del botón se parta */
+}
+
+.back-button:hover, .theme-toggle-button:hover {
+  background-color: #475569;
+}
+
+/* Estilos de botones para el tema claro */
+.lectura-detalle-container.light .back-button,
+.lectura-detalle-container.light .theme-toggle-button {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.lectura-detalle-container.light .back-button:hover,
+.lectura-detalle-container.light .theme-toggle-button:hover {
+  background-color: #cbd5e1;
+}
+
+
+/* --- Contenido del Artículo --- */
+.lectura-contenido p {
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.katex-display {
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 2rem 0; /* Más espacio vertical para las fórmulas */
+}
+
+
+/* src/components/Lecturas/LecturaDetalle.css */
+
+/* --- Estilos para el contenido del artículo (Añadir al final) --- */
+.lectura-contenido h1, .lectura-contenido h2, .lectura-contenido h3 {
+  font-family: 'Cambria', 'Georgia', serif;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.lectura-contenido h1 { font-size: 2rem; border-bottom: 2px solid; padding-bottom: 0.5rem; }
+.lectura-contenido h2 { font-size: 1.6rem; }
+.lectura-contenido h3 { font-size: 1.3rem; font-style: italic; }
+
+/* Estilos para el modo oscuro */
+.lectura-detalle-container.dark .lectura-contenido h1,
+.lectura-detalle-container.dark .lectura-contenido h2,
+.lectura-detalle-container.dark .lectura-contenido h3 {
+  color: #7dd3fc; /* Un azul más claro para los títulos */
+}
+.lectura-detalle-container.dark .lectura-contenido h1 { border-color: #38bdf8; }
+
+/* Estilos para el modo claro */
+.lectura-detalle-container.light .lectura-contenido h1,
+.lectura-detalle-container.light .lectura-contenido h2,
+.lectura-detalle-container.light .lectura-contenido h3 {
+  color: #0c4a6e; /* Un azul marino oscuro */
+}
+.lectura-detalle-container.light .lectura-contenido h1 { border-color: #0ea5e9; }
+
+/* Párrafos con estilos especiales */
+p.disclaimer {
+  background-color: rgba(240, 230, 140, 0.1); /* Un fondo sutil tipo khaki */
+  border-left: 4px solid #f0e68c;
+  padding: 1rem;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+.lectura-detalle-container.light p.disclaimer {
+   background-color: #fffbeb;
+   border-left-color: #facc15;
+}
+
+p.final-note {
+  text-align: center;
+  font-style: italic;
+  color: #94a3b8;
+}
+.lectura-detalle-container.light p.final-note {
+  color: #64748b;
+}
+
+/* Estilos para la tabla */
+.content-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+}
+.content-table th, .content-table td {
+  border: 1px solid #334155;
+  padding: 0.8rem;
+  text-align: left;
+}
+.content-table th {
+  font-weight: bold;
+}
+.lectura-detalle-container.dark .content-table th { background-color: #1e293b; color: #7dd3fc; }
+.lectura-detalle-container.light .content-table { border-color: #cbd5e1; }
+.lectura-detalle-container.light .content-table th, 
+.lectura-detalle-container.light .content-table td { border-color: #cbd5e1; }
+.lectura-detalle-container.light .content-table th { background-color: #f1f5f9; }
+
+/* Botón de descarga dentro del contenido */
+.download-wrapper {
+  text-align: center;
+  margin: 2rem 0;
+}
+.content-download-btn {
+  display: inline-block;
+  background-color: #38bdf8;
+  color: #0f172a;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.content-download-btn:hover {
+  background-color: #7dd3fc;
+  transform: translateY(-2px);
+}

@@ -1,0 +1,189 @@
+/* App.css */
+
+.lecturas-page {
+  padding: 2rem;
+  text-align: center;
+}
+
+.lecturas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.lectura-card {
+  background-color: #334155;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+.lectura-card:hover {
+  transform: translateY(-5px);
+}
+
+.lectura-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* HOME PAGE */
+.home-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 2rem;
+  background-color: #1e1e1e;
+  color: #f8fafc;
+  min-height: 60vh;             /* 👈 Ajusta altura mínima para centrar mejor */
+}
+
+.home-content h2 {
+  font-size: 2.5rem;
+  font-family: Georgia, serif;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);    /* 👈 Le da glow sutil como el banner */
+}
+
+.home-content p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  line-height: 1.6;
+  font-family: Georgia, serif;
+  font-style: italic;
+}
+
+
+/* NAVBAR */
+.navbar {
+  background-color: #232e3e;
+  display: flex;
+  justify-content: center;
+  padding: 0.1rem 0;
+}
+
+.navbar-link {
+  margin: 0 1rem;
+  color: #f8fafc;
+  font-family: 'Cambria', serif;
+  font-style: italic;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+  color: #38bdf8;    /* bonito azul claro al pasar el mouse */
+}
+
+
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;    /* 👈 Esto hace la magia */
+}
+
+main {
+  flex: 1;               /* 👈 Esto permite al contenido ocupar el espacio libre */
+}
+
+
+.banner-container {
+  position: relative;
+  width: 100vw;               /* 100% ancho de la ventana */
+  height: 35vh;              /* más delgado, ajustable */
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.banner-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.banner-text {
+  position: absolute;
+  top: 90%;
+  left: 15%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  text-align: left;
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+  50% {
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #0ff, 0 0 30px #0ff;
+  }
+  100% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+}
+
+
+.banner-text p {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 400;
+  color: #ffffff;
+  font-family: 'Cambria', serif;
+  font-style: italic;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+  letter-spacing: 2px;
+  animation: glow 2s infinite alternate;
+}
+
+
+
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* NUEVO: asegúrate que #root también esté sin márgenes ni relleno */
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+/* Opcional extra: elimina cualquier scroll inesperado */
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+}
+
+
+/* Corregir efecto de centrar body */
+body {
+  display: block !important;
+  place-items: unset !important;
+  min-height: auto !important;
+}
+
+
