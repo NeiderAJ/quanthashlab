@@ -1,0 +1,3497 @@
+================================================================================
+// ARCHIVO: README.md
+================================================================================
+
+# React + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+
+================================================================================
+// ARCHIVO: eslint.config.js
+================================================================================
+
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+
+export default [
+  { ignores: ['dist'] },
+  {
+    files: ['**/*.{js,jsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  },
+]
+
+
+================================================================================
+// ARCHIVO: generar_resumen.py
+================================================================================
+
+import os
+
+# --- Configuración ---
+# Directorio raíz del proyecto (donde se ejecuta este script)
+PROJECT_ROOT = '.' 
+
+# Nombre del archivo de salida
+OUTPUT_FILE = 'resumen_completo_proyecto.txt'
+
+# Extensiones de archivo que queremos incluir
+EXTENSIONS_TO_INCLUDE = (
+    '.js', '.jsx', '.css', '.html', '.json', '.md', '.py', '.txt' 
+)
+
+# Directorios que queremos ignorar completamente
+DIRS_TO_IGNORE = [
+    'node_modules',
+    '.git',
+    'dist',
+    '__pycache__'
+]
+
+# Archivos específicos que queremos ignorar
+FILES_TO_IGNORE = [
+    OUTPUT_FILE, # Para no incluir el propio resumen en el resumen
+    'package-lock.json' # Suele ser muy largo y no tan relevante para el contexto
+]
+# --------------------
+
+def main():
+    """Función principal para generar el resumen del proyecto."""
+    try:
+        with open(OUTPUT_FILE, 'w', encoding='utf-8', errors='ignore') as outfile:
+            print(f"Generando resumen en '{OUTPUT_FILE}'...")
+            
+            for root, dirs, files in os.walk(PROJECT_ROOT, topdown=True):
+                # Ignorar directorios no deseados
+                dirs[:] = [d for d in dirs if d not in DIRS_TO_IGNORE]
+                
+                # Ordenar para una salida consistente
+                dirs.sort()
+                files.sort()
+
+                for filename in files:
+                    if filename.endswith(EXTENSIONS_TO_INCLUDE) and filename not in FILES_TO_IGNORE:
+                        
+                        file_path = os.path.join(root, filename)
+                        relative_path = os.path.relpath(file_path, PROJECT_ROOT).replace('\\', '/')
+                        
+                        try:
+                            with open(file_path, 'r', encoding='utf-8', errors='ignore') as infile:
+                                content = infile.read()
+                                
+                                # Escribir el encabezado del archivo
+                                outfile.write('=' * 80 + '\n')
+                                outfile.write(f'// ARCHIVO: {relative_path}\n')
+                                outfile.write('=' * 80 + '\n\n')
+                                
+                                # Escribir el contenido del archivo
+                                outfile.write(content)
+                                outfile.write('\n\n')
+                                
+                                print(f"  + Añadido: {relative_path}")
+
+                        except Exception as e:
+                            print(f"  ! Error al leer {relative_path}: {e}")
+            
+            print(f"\n¡Resumen '{OUTPUT_FILE}' generado con éxito!")
+
+    except IOError as e:
+        print(f"Error fatal al escribir en el archivo de salida: {e}")
+
+if __name__ == '__main__':
+    main()
+
+================================================================================
+// ARCHIVO: index.html
+================================================================================
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+
+================================================================================
+// ARCHIVO: package.json
+================================================================================
+
+{
+  "homepage": "https://NeiderAJ.github.io/quanthashlab/",
+  "name": "mi-blog-vite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview", 
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.0",
+    "chartjs-plugin-zoom": "^2.2.0",
+    "katex": "^0.16.22",
+    "react": "^19.1.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
+    "react-katex": "^3.1.0",
+    "react-router-dom": "^7.6.0",
+    "react-syntax-highlighter": "^15.6.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "gh-pages": "^6.3.0",
+    "globals": "^16.0.0",
+    "vite": "^6.3.5"
+  }
+}
+
+
+================================================================================
+// ARCHIVO: vite.config.js
+================================================================================
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/quanthashlab/' // <-- LÍNEA añadida para subir a github pages
+})
+
+
+================================================================================
+// ARCHIVO: public/404.html
+================================================================================
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+================================================================================
+// ARCHIVO: src/App.css
+================================================================================
+
+/* App.css */
+
+.lecturas-page {
+  padding: 2rem;
+  text-align: center;
+}
+
+.lecturas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.lectura-card {
+  background-color: #334155;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+.lectura-card:hover {
+  transform: translateY(-5px);
+}
+
+.lectura-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* HOME PAGE */
+.home-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 2rem;
+  background-color: #1e1e1e;
+  color: #f8fafc;
+  min-height: 60vh;             /* 👈 Ajusta altura mínima para centrar mejor */
+}
+
+.home-content h2 {
+  font-size: 2.5rem;
+  font-family: Georgia, serif;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);    /* 👈 Le da glow sutil como el banner */
+}
+
+.home-content p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  line-height: 1.6;
+  font-family: Georgia, serif;
+  font-style: italic;
+}
+
+
+/* NAVBAR */
+.navbar {
+  background-color: #232e3e;
+  display: flex;
+  justify-content: center;
+  padding: 0.1rem 0;
+}
+
+.navbar-link {
+  margin: 0 1rem;
+  color: #f8fafc;
+  font-family: 'Cambria', serif;
+  font-style: italic;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+  color: #38bdf8;    /* bonito azul claro al pasar el mouse */
+}
+
+
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;    /* 👈 Esto hace la magia */
+}
+
+main {
+  flex: 1;               /* 👈 Esto permite al contenido ocupar el espacio libre */
+}
+
+
+.banner-container {
+  position: relative;
+  width: 100vw;               /* 100% ancho de la ventana */
+  height: 35vh;              /* más delgado, ajustable */
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.banner-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.banner-text {
+  position: absolute;
+  top: 90%;
+  left: 15%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  text-align: left;
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+  50% {
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #0ff, 0 0 30px #0ff;
+  }
+  100% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+}
+
+
+.banner-text p {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 400;
+  color: #ffffff;
+  font-family: 'Cambria', serif;
+  font-style: italic;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+  letter-spacing: 2px;
+  animation: glow 2s infinite alternate;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column; /* Apila los enlaces verticalmente */
+    align-items: center; /* Centra los enlaces */
+    padding: 1rem 0;
+  }
+
+  .navbar-link {
+    margin: 0.5rem 0; /* Añade espacio vertical entre enlaces */
+  }
+}
+
+
+
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* NUEVO: asegúrate que #root también esté sin márgenes ni relleno */
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+/* Opcional extra: elimina cualquier scroll inesperado */
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+}
+
+
+/* Corregir efecto de centrar body */
+body {
+  display: block !important;
+  place-items: unset !important;
+  min-height: auto !important;
+}
+
+
+/* En src/App.css, al final de todo */
+
+@media (max-width: 768px) {
+  /* Reduce el tamaño del título del Home */
+  .home-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  /* Reduce el tamaño del párrafo del Home */
+  .home-content p {
+    font-size: 1rem;
+  }
+
+  /* Ajusta el padding de las páginas para que no sea tan grande */
+  main {
+    padding: 0.5rem !important; /* Usamos !important para sobreescribir el estilo en línea */
+  }
+}
+
+================================================================================
+// ARCHIVO: src/App.jsx
+================================================================================
+
+// src/App.jsx
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from "./components/Layout";
+import Home from "./components/Home";      
+
+import LecturasPage from "./components/Lecturas/LecturasPage";
+import LecturaDetalle from "./components/Lecturas/LecturaDetalle"; // <-- AÑADE ESTA LÍNEA
+
+import AcademiaPage from "./components/Academia/AcademiaPage";
+import SimulacionesPage from "./components/Simulaciones/SimulacionesPage";
+import EconofisicaPage from "./components/Econofisica/EconofisicaPage";
+import BibliotecaPage from './components/Biblioteca/BibliotecaPage';
+import RoadmapPage from './components/Roadmap/RoadmapPage';
+
+import MovimientoBrownianoPage from './components/Simulaciones/MovimientoBrownianoPage';
+import BlackScholesPage from './components/Simulaciones/BlackScholesPage';
+
+
+function App() {
+  return (
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} /> 
+          <Route path="/roadmap" element={<RoadmapPage />} />
+          <Route path="/lecturas" element={<LecturasPage />} /> 
+          <Route path="/lecturas/:slug" element={<LecturaDetalle />} /> 
+          <Route path="/biblioteca" element={<BibliotecaPage />} /> 
+          <Route path="/academia" element={<AcademiaPage />} />
+          <Route path="/simulaciones" element={<SimulacionesPage />} />
+          <Route path="/simulaciones/:slug" element={<>Página de detalle en construcción</>} />
+          {/* Por ahora, solo conectaremos las dos primeras para probar */}
+          <Route path="/simulaciones/movimiento-browniano" element={<MovimientoBrownianoPage />} />
+          <Route path="/simulaciones/black-scholes-3d" element={<BlackScholesPage />} />
+          <Route path="/econofisica" element={<EconofisicaPage />} />
+          <Route path="/nosotros" element={<h2>Sobre el founder puedes visitar su Online-CV: 
+            https://storage.googleapis.com/neiderjimenez/index.html
+          </h2>} />
+        </Routes>
+      </Layout>
+    </Router>
+  );
+};
+
+export default App;
+
+
+================================================================================
+// ARCHIVO: src/index.css
+================================================================================
+
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+/*Este es el body recomendado por gpt*/
+body {
+  margin: 0;
+  /* display: flex;   ← elimina esta línea */
+  /* place-items: center; ← y esta */
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+
+/* este es el original
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}*/
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+
+
+/*para el katex*/
+
+/* Le decimos a KaTeX que busque sus fuentes en la carpeta /fonts/ que hemos copiado a 'public' */
+@font-face {
+  font-family: 'KaTeX_Main';
+  src: url('/fonts/KaTeX_Main-Regular.woff2') format('woff2'), url('/fonts/KaTeX_Main-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KaTeX_Main';
+  src: url('/fonts/KaTeX_Main-Bold.woff2') format('woff2'), url('/fonts/KaTeX_Main-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KaTeX_Main';
+  src: url('/fonts/KaTeX_Main-Italic.woff2') format('woff2'), url('/fonts/KaTeX_Main-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'KaTeX_Main';
+  src: url('/fonts/KaTeX_Main-BoldItalic.woff2') format('woff2'), url('/fonts/KaTeX_Main-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'KaTeX_Math';
+  src: url('/fonts/KaTeX_Math-Italic.woff2') format('woff2'), url('/fonts/KaTeX_Math-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'KaTeX_Math';
+  src: url('/fonts/KaTeX_Math-BoldItalic.woff2') format('woff2'), url('/fonts/KaTeX_Math-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* --- Añadir estas definiciones que faltan al final del bloque @font-face --- */
+@font-face {
+  font-family: 'KaTeX_Size1';
+  src: url('/fonts/KaTeX_Size1-Regular.woff2') format('woff2'), url('/fonts/KaTeX_Size1-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KaTeX_Size2';
+  src: url('/fonts/KaTeX_Size2-Regular.woff2') format('woff2'), url('/fonts/KaTeX_Size2-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KaTeX_AMS';
+  src: url('/fonts/KaTeX_AMS-Regular.woff2') format('woff2'), url('/fonts/KaTeX_AMS-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+================================================================================
+// ARCHIVO: src/main.jsx
+================================================================================
+
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+import 'katex/dist/katex.min.css'; 
+
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+
+
+
+================================================================================
+// ARCHIVO: src/resumen_proyecto.txt
+================================================================================
+
+
+
+// ========================================
+// ARCHIVO: App.css
+// ========================================
+/* App.css */
+
+.lecturas-page {
+  padding: 2rem;
+  text-align: center;
+}
+
+.lecturas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.lectura-card {
+  background-color: #334155;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+.lectura-card:hover {
+  transform: translateY(-5px);
+}
+
+.lectura-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* HOME PAGE */
+.home-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 2rem;
+  background-color: #1e1e1e;
+  color: #f8fafc;
+  min-height: 60vh;             /* 👈 Ajusta altura mínima para centrar mejor */
+}
+
+.home-content h2 {
+  font-size: 2.5rem;
+  font-family: Georgia, serif;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);    /* 👈 Le da glow sutil como el banner */
+}
+
+.home-content p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  line-height: 1.6;
+  font-family: Georgia, serif;
+  font-style: italic;
+}
+
+
+/* NAVBAR */
+.navbar {
+  background-color: #232e3e;
+  display: flex;
+  justify-content: center;
+  padding: 0.1rem 0;
+}
+
+.navbar-link {
+  margin: 0 1rem;
+  color: #f8fafc;
+  font-family: 'Cambria', serif;
+  font-style: italic;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+  color: #38bdf8;    /* bonito azul claro al pasar el mouse */
+}
+
+
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;    /* 👈 Esto hace la magia */
+}
+
+main {
+  flex: 1;               /* 👈 Esto permite al contenido ocupar el espacio libre */
+}
+
+
+.banner-container {
+  position: relative;
+  width: 100vw;               /* 100% ancho de la ventana */
+  height: 35vh;              /* más delgado, ajustable */
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.banner-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.banner-text {
+  position: absolute;
+  top: 90%;
+  left: 15%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  text-align: left;
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+  50% {
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #0ff, 0 0 30px #0ff;
+  }
+  100% {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+}
+
+
+.banner-text p {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 400;
+  color: #ffffff;
+  font-family: 'Cambria', serif;
+  font-style: italic;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+  letter-spacing: 2px;
+  animation: glow 2s infinite alternate;
+}
+
+
+
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* NUEVO: asegúrate que #root también esté sin márgenes ni relleno */
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+/* Opcional extra: elimina cualquier scroll inesperado */
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+}
+
+
+/* Corregir efecto de centrar body */
+body {
+  display: block !important;
+  place-items: unset !important;
+  min-height: auto !important;
+}
+
+
+
+
+// ========================================
+// ARCHIVO: App.jsx
+// ========================================
+// src/App.jsx
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from "./components/Layout";
+import Home from "./components/Home";      
+import LecturasPage from "./components/Lecturas/LecturasPage";
+
+
+
+function App() {
+  return (
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />   
+          <Route path="/lecturas" element={<LecturasPage />} /> 
+          <Route path="/academia" element={<h2>Academia Crypto</h2>} />
+          <Route path="/simulaciones" element={<h2>Simulaciones</h2>} />
+          <Route path="/econofisica" element={<h2>EconoFísica</h2>} />
+          <Route path="/nosotros" element={<h2>Nosotros</h2>} />
+        </Routes>
+      </Layout>
+    </Router>
+  );
+}
+
+export default App;
+
+
+// ========================================
+// ARCHIVO: components\Banner.jsx
+// ========================================
+// src/components/Banner.jsx
+import React from 'react';
+import videoBanner from '../assets/video.mp4'; // Ajusta la ruta a tu video
+
+const Banner = () => {
+  return (
+    <div className="banner-container">
+      <video autoPlay loop muted className="banner-video" >
+        <source src={videoBanner} type="video/mp4" />
+        Tu navegador no soporta videos.
+      </video>
+
+      <div className="banner-text">
+        <p> From Physics to Finance </p>
+      </div>
+     
+    </div>
+  );
+};
+
+export default Banner;
+
+
+// ========================================
+// ARCHIVO: components\Footer.jsx
+// ========================================
+// src/components/Footer.jsx
+import React from 'react';
+
+const Footer = () => {
+  return (
+    <footer style={styles.footer}>
+      <p>© 2025 QuantHashLab. Todos los derechos reservados.</p>
+    </footer>
+  );
+};
+
+const styles = {
+  footer: {
+    backgroundColor: '#1e293b',
+    color: '#f1f5f9',
+    textAlign: 'center',
+    padding: '1rem',
+    marginTop: '2rem',
+  }
+};
+
+export default Footer;
+
+
+// ========================================
+// ARCHIVO: components\Home.jsx
+// ========================================
+// src/components/Home.jsx
+import React from 'react';
+
+const Home = () => {
+  return (
+    <div className="home-content">
+      <h2>Bienvenido a QuantHashLab</h2>
+      <p>
+        Un espacio donde convergen las matemáticas, la física, las finanzas cuantitativas, el ML y la AI para comprender y revolucionar la economía descentralizada.
+        Aquí podrás encontrar recursos, simulaciones y un laboratorio de ideas para explorar el fascinante mundo de las finanzas digitales.
+        <br />
+        <br />
+        
+Si te apasionan finanzas digitales y el blockchain, este es tu laboratorio!
+      </p>
+    </div>
+  );
+};
+
+export default Home;
+
+
+// ========================================
+// ARCHIVO: components\Layout.jsx
+// ========================================
+// src/components/Layout.jsx
+import Banner from "./Banner";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+
+const Layout = ({ children }) => {
+  return (
+    <div className="layout">
+      <Banner />
+      <Navbar />
+      <main style={{ padding: "1rem" }}>{children}</main>
+      <Footer />
+    </div>
+  );
+};
+
+export default Layout;
+
+
+// ========================================
+// ARCHIVO: components\Lecturas\data\lecturasData.js
+// ========================================
+import imag1 from './images/imag1.jpg';
+import imag2 from './images/imag2.jpg';
+import imag3 from './images/imag3.jpg';
+import imag4 from './images/imag4.jpg';
+
+const lecturas = [
+  {
+    id: 1,
+    titulo: "Quantitative Crypto",
+    descripcion: "¿Es posible aplicar los métodos cuantitativos al mundo DeFi?",
+    imagen: imag1
+  },
+  {
+    id: 2,
+    titulo: "Biblioteca Quant",
+    descripcion: "Links a libros esenciales en la Econofísica.",
+    imagen: imag2
+  },
+  {
+    id: 3,
+    titulo: "Geometría diferencial y Análisis Cuantitativo",
+    descripcion: "Se discute el libro 'Analysis, Geometry, and Modeling in Finance' de Henry-Labordère.",
+    imagen: imag3
+  },
+  {
+    id: 4,
+    titulo: "Física, modelado y finanzas cuantitativas",
+    descripcion: "Econofísica, métodos cuantitativos y DeFi.",
+    imagen: imag4
+  },
+  // Puedes agregar más objetos aquí si lo deseas
+];
+
+export default lecturas;
+
+
+// ========================================
+// ARCHIVO: components\Lecturas\LecturaCard.jsx
+// ========================================
+import React from 'react';
+import './Lecturas.css'; // Importa estilos
+
+const LecturaCard = ({ titulo, descripcion, imagen }) => {
+  return (
+    <div className="lectura-card">
+      <img src={imagen} alt={titulo} className="lectura-img" />
+      <h3 className="lectura-title">{titulo}</h3>
+      <p className="lectura-desc">{descripcion}</p>
+    </div>
+  );
+};
+
+export default LecturaCard;
+
+
+// ========================================
+// ARCHIVO: components\Lecturas\Lecturas.css
+// ========================================
+.lecturas-page {
+  padding: 2rem;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  min-height: 100vh;
+}
+
+.lecturas-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  border-bottom: 2px solid #38bdf8;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.lecturas-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));  /*minmax(220px, 1fr) → para cuántas tarjetas entran por fila.*/
+}
+
+.lectura-card {
+  width: 100%;
+  max-width: 280px;        /* ← Limita el ancho */
+  height: 320px;           /* ← Altura fija */
+  background-color: #1e293b;
+  border-radius: 1rem;
+  padding: 0.7rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.lectura-card:hover {
+  transform: scale(1.03);
+}
+
+.lectura-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;       /* ← recorta sin deformar */
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+
+.lectura-title {
+  font-size: 1.1rem;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.lectura-desc {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+
+// ========================================
+// ARCHIVO: components\Lecturas\LecturasPage.jsx
+// ========================================
+import React from 'react';
+import lecturas from './data/lecturasData';
+import LecturaCard from './LecturaCard';
+import './Lecturas.css';
+
+const LecturasPage = () => {
+  return (
+    <div className="lecturas-page">
+      <h2 className="lecturas-header">Lecturas Quant</h2>
+      <div className="lecturas-grid">
+        {lecturas.map((l) => (
+          <LecturaCard key={l.id} {...l} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default LecturasPage;
+
+
+// ========================================
+// ARCHIVO: components\Navbar.jsx
+// ========================================
+// src/components/Navbar.jsx
+import React from 'react';
+
+import { Link } from 'react-router-dom';
+
+
+const Navbar = () => {
+  return (
+    <nav className="navbar" >
+      <Link className="navbar-link" to="/">Inicio</Link>
+      <Link className="navbar-link" to="/lecturas">Lecturas Quant</Link>
+      <Link className="navbar-link" to="/academia">Academia Crypto</Link>
+      <Link className="navbar-link" to="/simulaciones">Simulaciones</Link>
+      <Link className="navbar-link" to="/econofisica">EconoFísica</Link>
+      <Link className="navbar-link" to="/nosotros">Nosotros</Link>
+    </nav>
+  );
+};
+
+export default Navbar;
+
+
+// ========================================
+// ARCHIVO: index.css
+// ========================================
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+/*Este es el body recomendado por gpt*/
+body {
+  margin: 0;
+  /* display: flex;   ← elimina esta línea */
+  /* place-items: center; ← y esta */
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+
+/* este es el original
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}*/
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+
+// ========================================
+// ARCHIVO: main.jsx
+// ========================================
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+
+================================================================================
+// ARCHIVO: src/components/Banner.jsx
+================================================================================
+
+// src/components/Banner.jsx
+import React from 'react';
+import videoBanner from '../assets/video.mp4'; // Ajusta la ruta a tu video
+
+const Banner = () => {
+  return (
+    <div className="banner-container">
+      <video autoPlay loop muted className="banner-video" >
+        <source src={videoBanner} type="video/mp4" />
+        Tu navegador no soporta videos.
+      </video>
+
+      <div className="banner-text">
+        <p> From Physics to Finance </p>
+      </div>
+     
+    </div>
+  );
+};
+
+export default Banner;
+
+
+================================================================================
+// ARCHIVO: src/components/Footer.jsx
+================================================================================
+
+// src/components/Footer.jsx
+import React from 'react';
+
+const Footer = () => {
+  return (
+    <footer style={styles.footer}>
+      <p>© 2025 QuantHashLab. Todos los derechos reservados.</p>
+    </footer>
+  );
+};
+
+const styles = {
+  footer: {
+    backgroundColor: '#1e293b',
+    color: '#f1f5f9',
+    textAlign: 'center',
+    padding: '1rem',
+    marginTop: '2rem',
+  }
+};
+
+export default Footer;
+
+
+================================================================================
+// ARCHIVO: src/components/Home.jsx
+================================================================================
+
+// src/components/Home.jsx
+import React from 'react';
+
+const Home = () => {
+  return (
+    <div className="home-content">
+      <h2>Bienvenido a QuantHashLab</h2>
+      <p>
+        Un espacio donde convergen las matemáticas, la física, las finanzas cuantitativas, el ML y la AI para comprender y revolucionar la economía descentralizada.
+        Aquí podrás encontrar recursos, simulaciones y un laboratorio de ideas para explorar el fascinante mundo de las finanzas digitales.
+        <br />
+        <br />
+        
+Si te apasionan finanzas digitales y el blockchain, este es tu laboratorio!
+      </p>
+    </div>
+  );
+};
+
+export default Home;
+
+
+================================================================================
+// ARCHIVO: src/components/Layout.jsx
+================================================================================
+
+// src/components/Layout.jsx
+import Banner from "./Banner";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+
+const Layout = ({ children }) => {
+  return (
+    <div className="layout">
+      <Banner />
+      <Navbar />
+      <main style={{ padding: "1rem" }}>{children}</main>
+      <Footer />
+    </div>
+  );
+};
+
+export default Layout;
+
+
+================================================================================
+// ARCHIVO: src/components/Navbar.jsx
+================================================================================
+
+// src/components/Navbar.jsx
+import React from 'react';
+
+import { Link } from 'react-router-dom';
+
+
+const Navbar = () => {
+  return (
+    <nav className="navbar" >
+      <Link className="navbar-link" to="/">Inicio</Link>
+       <Link className="navbar-link" to="/roadmap">RoadMap pa' Físicos</Link>
+      <Link className="navbar-link" to="/lecturas">Lecturas Quant</Link>      
+      <Link className="navbar-link" to="/simulaciones">Simulaciones</Link>
+      <Link className="navbar-link" to="/academia">Academia Crypto</Link>
+      <Link className="navbar-link" to="/econofisica">EconoFísica</Link>
+      <Link className="navbar-link" to="/nosotros">Founders</Link>
+    </nav>
+  );
+};
+
+export default Navbar;
+
+
+================================================================================
+// ARCHIVO: src/components/Academia/AcademiaPage.jsx
+================================================================================
+
+import React from 'react';
+
+const AcademiaPage = () => {
+  return (
+    <div>
+      <h2>Recuerda!</h2>
+      <p>Para recibir nuestros cursos sobre análisis cuantitativo en Blokchain debes ser afiliado. Escribe a anyeres.atehortua@udea.edu.co</p>
+    </div>
+  );
+};
+
+export default AcademiaPage;
+
+================================================================================
+// ARCHIVO: src/components/Biblioteca/Biblioteca.css
+================================================================================
+
+/* src/components/Biblioteca/Biblioteca.css */
+
+/* Estilos para la página principal de la biblioteca (los añadiremos más tarde) */
+.biblioteca-page {
+  padding: 2rem;
+  background-color: #0f172a;
+}
+
+.biblioteca-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  color: #38bdf8;
+  border-bottom: 2px solid #38bdf8;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.biblioteca-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Una columna por defecto para móviles */
+  gap: 2.5rem;
+}
+
+/* --- Estilos para cada tarjeta de libro --- */
+.libro-card {
+  display: flex;
+  flex-direction: column; /* Apilado en móviles */
+  gap: 1.5rem;
+  background-color: #1e293b;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  color: #e2e8f0;
+  max-width: 800px; /* Ancho máximo de la tarjeta */
+  margin: 0 auto; /* Centra las tarjetas en el grid */
+}
+
+/* Portada del libro */
+.libro-card-portada {
+  flex-shrink: 0;
+  text-align: center; /* Centra la imagen en móviles */
+}
+
+.libro-card-portada img {
+  width: 150px; /* Ancho fijo para la portada */
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Información del libro */
+.libro-card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.libro-titulo {
+  font-size: 1.4rem;
+  color: #38bdf8;
+  margin-bottom: 0.25rem;
+}
+
+.libro-autor {
+  font-size: 1rem;
+  font-style: italic;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.libro-descripcion {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  flex-grow: 1; /* Permite que la descripción ocupe el espacio disponible */
+  margin-bottom: 1.5rem;
+}
+
+/* Botón de Descarga */
+.libro-descargar-btn {
+  display: inline-block;
+  background-color: #38bdf8;
+  color: #0f172a;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  align-self: flex-start; /* Alinea el botón a la izquierda */
+}
+
+.libro-descargar-btn:hover {
+  background-color: #7dd3fc;
+  transform: translateY(-2px);
+}
+
+/* --- Media Query para pantallas más grandes (Desktop) --- */
+@media (min-width: 768px) {
+  .libro-card {
+    flex-direction: row; /* Lado a lado en pantallas grandes */
+  }
+
+  .libro-card-portada {
+    text-align: left;
+  }
+}
+
+================================================================================
+// ARCHIVO: src/components/Biblioteca/BibliotecaPage.jsx
+================================================================================
+
+// src/components/Biblioteca/BibliotecaPage.jsx
+import React from 'react';
+import bibliotecaData from '../../data/bibliotecaData';
+import LibroCard from './LibroCard';
+import './Biblioteca.css';
+
+const BibliotecaPage = () => {
+  return (
+    <div className="biblioteca-page">
+      <div style={{ textAlign: 'center' }}>
+        <h2 className="biblioteca-header">Biblioteca Quant</h2>
+      </div>
+      <div className="biblioteca-grid">
+        {bibliotecaData.map((libro) => (
+          <LibroCard key={libro.id} libro={libro} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default BibliotecaPage;
+
+================================================================================
+// ARCHIVO: src/components/Biblioteca/LibroCard.jsx
+================================================================================
+
+// src/components/Biblioteca/LibroCard.jsx
+import React from 'react';
+import './Biblioteca.css';
+
+const LibroCard = ({ libro }) => {
+  const { titulo, autor, descripcion, portada, pdf } = libro;
+
+  return (
+    <div className="libro-card">
+      <div className="libro-card-portada">
+        <img src={portada} alt={`Portada de ${titulo}`} />
+      </div>
+      <div className="libro-card-info">
+        <h3 className="libro-titulo">{titulo}</h3>
+        <p className="libro-autor">{autor}</p>
+        <p className="libro-descripcion">{descripcion}</p>
+        <a 
+          href={pdf} 
+          download 
+          className="libro-descargar-btn"
+          target="_blank" // Abre el PDF en una nueva pestaña (opcional, pero recomendado)
+          rel="noopener noreferrer" // Buena práctica de seguridad para target="_blank"
+        >
+          Descargar PDF
+        </a>
+      </div>
+    </div>
+  );
+};
+
+export default LibroCard;
+
+================================================================================
+// ARCHIVO: src/components/Econofisica/EconofisicaPage.jsx
+================================================================================
+
+import React from 'react';
+
+const EconofisicaPage = () => {
+  return (
+    <div>
+      <h2>Recuerda!</h2>
+      <p>Para clases y algoritmos de Econofísica debes ser afiliado. Escribe a anyeres.atehortua@udea.edu.co </p>
+    </div>
+  );
+};
+
+export default EconofisicaPage;
+
+================================================================================
+// ARCHIVO: src/components/Lecturas/LecturaCard.jsx
+================================================================================
+
+// src/components/Lecturas/LecturaCard.jsx
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Lecturas.css'; // Importa estilos
+
+const LecturaCard = ({ titulo, descripcion, imagen, slug }) => {
+  // Esta es la lógica nueva:
+  // 1. Verificamos si el 'slug' que recibimos ya empieza con una barra '/'.
+  //    Esto indica que es una ruta completa (ej: "/biblioteca").
+  // 2. Si es así, usamos el slug tal cual.
+  // 3. Si no, es un slug de detalle, así que construimos la ruta como antes (ej: "/lecturas/quantitative-crypto").
+  const targetUrl = slug.startsWith('/') ? slug : `/lecturas/${slug}`;
+
+  return (
+    // Usamos la variable 'targetUrl' que acabamos de crear.
+    <Link to={targetUrl} className="lectura-card-link">
+      <div className="lectura-card">
+        <img src={imagen} alt={titulo} className="lectura-img" />
+        <h3 className="lectura-title">{titulo}</h3>
+        <p className="lectura-desc">{descripcion}</p>
+      </div>
+    </Link>
+  );
+};
+
+export default LecturaCard;
+
+================================================================================
+// ARCHIVO: src/components/Lecturas/LecturaDetalle.css
+================================================================================
+
+/* src/components/Lecturas/LecturaDetalle.css */
+
+/* --- Contenedor Principal y Temas --- */
+
+/* Estilos base para el contenedor */
+.lectura-detalle-container {
+  max-width: 900px; /* Aumentamos el ancho para aprovechar más espacio */
+  margin: 2rem auto;
+  padding: 2rem 3rem; /* Más padding horizontal */
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para el cambio de tema */
+}
+
+/* TEMA OSCURO (Por defecto) */
+.lectura-detalle-container.dark {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+.lectura-detalle-container.dark h1 {
+  color: #38bdf8;
+}
+
+.lectura-detalle-container.dark .katex-display {
+  background-color: #1e293b;
+}
+
+/* TEMA CLARO */
+.lectura-detalle-container.light {
+  background-color: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+}
+
+.lectura-detalle-container.light h1 {
+  color: #0284c7; /* Un azul un poco más oscuro para mejor contraste en blanco */
+}
+
+.lectura-detalle-container.light .lectura-contenido p {
+  color: #334155; /* Un gris oscuro para el texto, menos duro que el negro puro */
+}
+
+.lectura-detalle-container.light .katex-display {
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+}
+
+
+/* --- Cabecera (Header) --- */
+.lectura-detalle-header {
+  display: flex; /* ¡La clave para alinear los elementos! */
+  justify-content: space-between; /* Empuja los elementos a los extremos */
+  align-items: center; /* Centra verticalmente los elementos */
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 1rem;
+}
+
+.lectura-detalle-container.light .lectura-detalle-header {
+  border-bottom-color: #cbd5e1;
+}
+
+/* Contenido principal de la cabecera (thumbnail + título) */
+.header-main-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Espacio entre la imagen y el título */
+}
+
+/* Título principal H1 */
+.lectura-detalle-header h1 {
+  font-size: 1.9rem;
+  margin: 0; /* Reseteamos márgenes del h1 */
+  padding: 0;
+  border: none; /* Quitamos el borde que tenía antes */
+  position: static; /* Quitamos el posicionamiento anterior */
+  transform: none; /* Quitamos la transformación anterior */
+}
+
+/* Imagen en miniatura (Thumbnail) */
+.lectura-thumbnail-img {
+  width: 80px;  /* <-- Puedes ajustar este valor (p.ej. 60px, 100px) */
+  height: 80px; /* <-- Y este para cambiar el tamaño */
+  object-fit: cover;
+  border-radius: 8px; /* Un poco redondeado */
+  flex-shrink: 0; /* Evita que la imagen se encoja */
+}
+
+/* --- Botones --- */
+.back-button, .theme-toggle-button {
+  background-color: #334155;
+  color: #e2e8f0;
+  border: none;
+  padding: 0.3rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  white-space: nowrap; /* Evita que el texto del botón se parta */
+}
+
+.back-button:hover, .theme-toggle-button:hover {
+  background-color: #475569;
+}
+
+/* Estilos de botones para el tema claro */
+.lectura-detalle-container.light .back-button,
+.lectura-detalle-container.light .theme-toggle-button {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.lectura-detalle-container.light .back-button:hover,
+.lectura-detalle-container.light .theme-toggle-button:hover {
+  background-color: #cbd5e1;
+}
+
+
+/* --- Contenido del Artículo --- */
+.lectura-contenido p {
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.katex-display {
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 2rem 0; /* Más espacio vertical para las fórmulas */
+}
+
+
+/* src/components/Lecturas/LecturaDetalle.css */
+
+/* --- Estilos para el contenido del artículo (Añadir al final) --- */
+.lectura-contenido h1, .lectura-contenido h2, .lectura-contenido h3 {
+  font-family: 'Cambria', 'Georgia', serif;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.lectura-contenido h1 { font-size: 2rem; border-bottom: 2px solid; padding-bottom: 0.5rem; }
+.lectura-contenido h2 { font-size: 1.6rem; }
+.lectura-contenido h3 { font-size: 1.3rem; font-style: italic; }
+
+/* Estilos para el modo oscuro */
+.lectura-detalle-container.dark .lectura-contenido h1,
+.lectura-detalle-container.dark .lectura-contenido h2,
+.lectura-detalle-container.dark .lectura-contenido h3 {
+  color: #7dd3fc; /* Un azul más claro para los títulos */
+}
+.lectura-detalle-container.dark .lectura-contenido h1 { border-color: #38bdf8; }
+
+/* Estilos para el modo claro */
+.lectura-detalle-container.light .lectura-contenido h1,
+.lectura-detalle-container.light .lectura-contenido h2,
+.lectura-detalle-container.light .lectura-contenido h3 {
+  color: #0c4a6e; /* Un azul marino oscuro */
+}
+.lectura-detalle-container.light .lectura-contenido h1 { border-color: #0ea5e9; }
+
+/* Párrafos con estilos especiales */
+p.disclaimer {
+  background-color: rgba(240, 230, 140, 0.1); /* Un fondo sutil tipo khaki */
+  border-left: 4px solid #f0e68c;
+  padding: 1rem;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+.lectura-detalle-container.light p.disclaimer {
+   background-color: #fffbeb;
+   border-left-color: #facc15;
+}
+
+p.final-note {
+  text-align: center;
+  font-style: italic;
+  color: #94a3b8;
+}
+.lectura-detalle-container.light p.final-note {
+  color: #64748b;
+}
+
+/* Estilos para la tabla */
+.content-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+}
+.content-table th, .content-table td {
+  border: 1px solid #334155;
+  padding: 0.8rem;
+  text-align: left;
+}
+.content-table th {
+  font-weight: bold;
+}
+.lectura-detalle-container.dark .content-table th { background-color: #1e293b; color: #7dd3fc; }
+.lectura-detalle-container.light .content-table { border-color: #cbd5e1; }
+.lectura-detalle-container.light .content-table th, 
+.lectura-detalle-container.light .content-table td { border-color: #cbd5e1; }
+.lectura-detalle-container.light .content-table th { background-color: #f1f5f9; }
+
+/* Botón de descarga dentro del contenido */
+.download-wrapper {
+  text-align: center;
+  margin: 2rem 0;
+}
+.content-download-btn {
+  display: inline-block;
+  background-color: #38bdf8;
+  color: #0f172a;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.content-download-btn:hover {
+  background-color: #7dd3fc;
+  transform: translateY(-2px);
+}
+
+/* En LecturaDetalle.css, al final de todo */
+
+@media (max-width: 768px) {
+  .lectura-detalle-container {
+    padding: 1rem; /* Reduce el padding interno */
+  }
+
+  .lectura-detalle-header {
+    flex-direction: column; /* Apila los botones y el título */
+    gap: 1rem;
+  }
+
+  .lectura-detalle-header h1 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .lectura-contenido h1 { font-size: 1.6rem; }
+  .lectura-contenido h2 { font-size: 1.3rem; }
+  .lectura-contenido h3 { font-size: 1.1rem; }
+}
+
+
+
+================================================================================
+// ARCHIVO: src/components/Lecturas/LecturaDetalle.jsx
+================================================================================
+
+// src/components/Lecturas/LecturaDetalle.jsx
+
+import React, {useState} from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import lecturasData from './data/lecturasData';
+import { InlineMath, BlockMath } from 'react-katex'; // Importamos el componente de KaTeX
+import './LecturaDetalle.css'; // Crearemos este archivo de estilos a continuación
+
+const LecturaDetalle = () => {
+  const [theme, setTheme] = useState('light'); // 'light' por defecto
+  const navigate = useNavigate(); // Hook para la navegación
+
+  // 1. Obtenemos el 'slug' de la URL
+  const { slug } = useParams();
+
+  // 2. Buscamos la lectura que coincida con el slug
+  const lectura = lecturasData.find(l => l.slug === slug);
+
+  // 3. Si no se encuentra la lectura, mostramos un mensaje
+  if (!lectura) {
+    return <div className="lectura-detalle-container"><h2>Lectura no encontrada</h2></div>;
+  }
+
+  // Función para cambiar de tema
+const toggleTheme = () => {
+  setTheme(currentTheme => (currentTheme === 'dark' ? 'light' : 'dark'));
+};
+
+// 4. Renderizamos el contenido de la lectura
+return (
+  // Aplicamos la clase del tema dinámicamente
+  <div className={`lectura-detalle-container ${theme}`}> 
+    <header className="lectura-detalle-header">
+      <button onClick={() => navigate(-1)} className="back-button">
+        ← Volver
+      </button>
+      
+      <div className="header-main-content">
+        <img src={lectura.imagen} alt="" className="lectura-thumbnail-img" />
+        <h1>{lectura.titulo}</h1>
+      </div>
+
+      <button onClick={toggleTheme} className="theme-toggle-button">
+        {theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
+      </button>
+    </header>
+    
+    <div className="lectura-contenido">
+  {lectura.contenido.map((block, index) => {
+    // Asignamos una clase extra si el bloque tiene un estilo definido
+    const blockClassName = block.style ? `content-block ${block.style}` : 'content-block';
+
+    switch (block.type) {
+      case 'p':
+        return <p key={index} className={blockClassName}>{block.content}</p>;
+      case 'h1':
+        return <h1 key={index} className={blockClassName}>{block.content}</h1>;
+      case 'h2':
+        return <h2 key={index} className={blockClassName}>{block.content}</h2>;
+      case 'h3':
+        return <h3 key={index} className={blockClassName}>{block.content}</h3>;
+      case 'math':
+        return <BlockMath key={index} math={block.content} />;
+      case 'table':
+        return (
+          <table key={index} className="content-table">
+            <thead>
+              <tr>
+                {block.headers.map((header, hIndex) => <th key={hIndex}>{header}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {block.rows.map((row, rIndex) => (
+                <tr key={rIndex}>
+                  {row.map((cell, cIndex) => <td key={cIndex}>{cell}</td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      case 'download_button':
+        return (
+          <div key={index} className="download-wrapper">
+            <a href={block.path} download className="content-download-btn">
+              {block.label}
+            </a>
+          </div>
+        );
+      default:
+        return null;
+    }
+  })}
+</div>
+  </div>
+);
+};
+
+export default LecturaDetalle;
+
+================================================================================
+// ARCHIVO: src/components/Lecturas/Lecturas.css
+================================================================================
+
+.lecturas-page {
+  padding: 2rem;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  min-height: 100vh;
+}
+
+.lecturas-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  border-bottom: 2px solid #38bdf8;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.lecturas-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));  /*minmax(220px, 1fr) → para cuántas tarjetas entran por fila.*/
+}
+
+.lectura-card {
+  width: 100%;
+  max-width: 280px;        /* ← Limita el ancho */
+  height: 320px;           /* ← Altura fija */
+  background-color: #1e293b;
+  border-radius: 1rem;
+  padding: 0.7rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.lectura-card:hover {
+  transform: scale(1.03);
+}
+
+.lectura-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;       /* ← recorta sin deformar */
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+
+.lectura-title {
+  font-size: 1.1rem;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.lectura-desc {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+
+================================================================================
+// ARCHIVO: src/components/Lecturas/LecturasPage.jsx
+================================================================================
+
+import React from 'react';
+import lecturas from './data/lecturasData';
+import LecturaCard from './LecturaCard';
+import './Lecturas.css';
+
+const LecturasPage = () => {
+  return (
+    <div className="lecturas-page">
+      <h2 className="lecturas-header">Lecturas Quant</h2>
+      <div className="lecturas-grid">
+        {lecturas.map((l) => (
+          <LecturaCard key={l.id} {...l} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default LecturasPage;
+
+
+================================================================================
+// ARCHIVO: src/components/Lecturas/data/lecturasData.js
+================================================================================
+
+import imag1 from './images/imag1.jpg';
+import imag2 from './images/imag2.jpg';
+import imag3 from './images/imag3.jpg';
+import imag4 from './images/imag4.jpg';
+import contenidoGeometria from '../../../data/posts/geometria-diferencial.js';
+import contenidoFisica from '../../../data/posts/fisica-finanzas.js';
+
+
+
+const lecturas = [
+  {
+    id: 1,
+    titulo: "Quantitative Crypto",
+    slug: "quantitative-crypto", //<-- Una cadena de texto simple, en minúsculas y sin espacios, ideal para las URLs
+    descripcion: "¿Es posible aplicar los métodos cuantitativos al mundo DeFi?",
+    imagen: imag1,
+    contenido: [ // <-- NUEVO CAMPO: Contenido estructurado
+      { 
+        type: 'p', // 'p' para párrafo de texto
+        content: 'La intersección entre las finanzas cuantitativas y el ecosistema de las criptomonedas, especialmente DeFi (Finanzas Descentralizadas), abre un universo de posibilidades. Los modelos estocásticos que tradicionalmente se han usado para valorar derivados en mercados tradicionales pueden adaptarse para analizar el comportamiento de activos digitales.' 
+      },
+      { 
+        type: 'p', 
+        content: 'Por ejemplo, la famosa ecuación de Black-Scholes, que se usa para la valoración de opciones europeas, tiene como base el movimiento Browniano geométrico.' 
+      },
+      { 
+        type: 'math', // 'math' para una fórmula en bloque (display)
+        content: '\\frac{\\partial V}{\\partial t} + \\frac{1}{2}\\sigma^2 S^2 \\frac{\\partial^2 V}{\\partial S^2} + rS \\frac{\\partial V}{\\partial S} - rV = 0' 
+      },
+      { 
+        type: 'p', 
+        content: 'Donde V es el precio de la opción, S es el precio del subyacente, t es el tiempo, σ es la volatilidad y r es la tasa de interés libre de riesgo. Adaptar estos conceptos al volátil y descentralizado mundo cripto no es trivial, pero es un campo de investigación activo y fascinante.' 
+      }
+    ]
+  },
+  {
+    id: 2,
+    titulo: "Biblioteca Quant",
+    slug: "/biblioteca",
+    descripcion: "Links a libros esenciales en la Econofísica.",
+    imagen: imag2,
+    contenido: [
+      { type: 'p', content: 'Aquí va el contenido detallado sobre la Biblioteca Quant...' }
+    ]
+  },
+  {
+    id: 3,
+    titulo: "Geometría diferencial y Análisis Cuantitativo",
+    slug: "geometria-diferencial-analisis-cuantitativo",
+    descripcion: "Se discute el libro 'Analysis, Geometry, and Modeling in Finance' de Henry-Labordère.",
+    imagen: imag3,
+    contenido: contenidoGeometria
+  },
+  {
+  id: 4,
+  titulo: "Física, modelado y finanzas cuantitativas",
+  slug: "fisica-modelado-finanzas",
+  descripcion: "Econofísica, métodos cuantitativos y DeFi.",
+  imagen: imag4,
+  contenido: contenidoFisica // <-- Aquí está el cambio
+ },
+];
+
+export default lecturas;
+
+================================================================================
+// ARCHIVO: src/components/Roadmap/Roadmap.css
+================================================================================
+
+/* src/components/Roadmap/Roadmap.css */
+
+/* Hacemos que los estilos dependan del tema del contenedor padre */
+
+/* --- TEMA CLARO (POR DEFECTO) --- */
+.lectura-detalle-container.light .roadmap-h1, 
+.lectura-detalle-container.light .roadmap-h2, 
+.lectura-detalle-container.light .roadmap-h3 {
+  color: #0c4a6e;
+}
+.lectura-detalle-container.light .roadmap-h1 { border-bottom: 2px solid #0ea5e9; }
+.lectura-detalle-container.light .roadmap-blockquote { border-left-color: #facc15; background-color: #fffbeb; }
+.lectura-detalle-container.light .styled-list-container h4 { color: #0284c7; }
+
+
+/* --- TEMA OSCURO --- */
+.lectura-detalle-container.dark .roadmap-h1, 
+.lectura-detalle-container.dark .roadmap-h2, 
+.lectura-detalle-container.dark .roadmap-h3 {
+  color: #7dd3fc;
+}
+.lectura-detalle-container.dark .roadmap-h1 { border-bottom-color: #38bdf8; }
+.lectura-detalle-container.dark .roadmap-blockquote { border-left-color: #f0e68c; background-color: rgba(240, 230, 140, 0.1); color: #e2e8f0; }
+.lectura-detalle-container.dark .styled-list-container h4 { color: #38bdf8; }
+.lectura-detalle-container.dark p { color: #e2e8f0; }
+.lectura-detalle-container.dark .content-list-styled { color: #e2e8f0; }
+
+/* Estilos base (independientes del tema) */
+.roadmap-h1, .roadmap-h2, .roadmap-h3 {
+  font-family: 'Cambria', 'Georgia', serif;
+}
+.roadmap-h1 { font-size: 2.2rem; padding-bottom: 0.5rem; margin: 0 0 1.5rem 0; }
+.roadmap-h2 { font-size: 1.8rem; margin: 2rem 0 1rem 0; }
+.roadmap-h3 { font-size: 1.4rem; font-style: italic; margin: 1.5rem 0 1rem 0; }
+
+.roadmap-blockquote {
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+
+.styled-list-container h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.content-list-styled {
+  list-style-type: '■ ';
+  padding-left: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+p.author-line {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #64748b;
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+}
+.lectura-detalle-container.dark p.author-line {
+  color: #94a3b8;
+}
+
+================================================================================
+// ARCHIVO: src/components/Roadmap/RoadmapPage.jsx
+================================================================================
+
+// src/components/Roadmap/RoadmapPage.jsx
+
+import React, { useState } from 'react'; // Importamos useState
+import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
+import contenidoRoadmap from '../../data/posts/roadmap-fisicos.js';
+import { BlockMath } from 'react-katex';
+import './Roadmap.css';
+// Importamos los estilos de LecturaDetalle para reutilizar los botones y el layout general
+import '../Lecturas/LecturaDetalle.css'; 
+
+const RoadmapPage = () => {
+  const [theme, setTheme] = useState('light'); // Estado para el tema, 'light' por defecto
+  const navigate = useNavigate(); // Hook para la navegación
+
+  const toggleTheme = () => {
+    setTheme(currentTheme => (currentTheme === 'dark' ? 'light' : 'dark'));
+  };
+
+  const renderBlock = (block, index) => {
+    // ... (la función renderBlock se queda exactamente igual que antes)
+    const blockClassName = block.style ? `content-block ${block.style}` : 'content-block';
+
+    switch (block.type) {
+      case 'p': return <p key={index} className={blockClassName}>{block.content}</p>;
+      case 'h1': return <h1 key={index} className="roadmap-h1">{block.content}</h1>;
+      case 'h2': return <h2 key={index} className="roadmap-h2">{block.content}</h2>;
+      case 'h3': return <h3 key={index} className="roadmap-h3">{block.content}</h3>;
+      case 'math': return <BlockMath key={index} math={block.content} />;
+      case 'list': return (<ul key={index} className="content-list"> {block.items.map((item, i) => <li key={i}>{item}</li>)} </ul>);
+      case 'list_styled': return (
+        <div key={index} className="styled-list-container">
+          <h4>{block.title}</h4>
+          <ul className="content-list-styled">{block.items.map((item, i) => <li key={i}>{item}</li>)}</ul>
+        </div>
+      );
+      case 'blockquote': return <blockquote key={index} className="roadmap-blockquote">{block.content}</blockquote>;
+      case 'download_button': return (
+        <div key={index} className="download-wrapper">
+          <a href={block.path} download className="content-download-btn">{block.label}</a>
+        </div>
+      );
+      default: return null;
+    }
+  };
+
+  return (
+    // Ahora usamos la clase 'lectura-detalle-container' para heredar el layout
+    <div className={`lectura-detalle-container ${theme}`}> 
+      <header className="lectura-detalle-header">
+        <button onClick={() => navigate(-1)} className="back-button">
+          ← Volver
+        </button>
+        
+        {/* Dejamos un div vacío en el medio para empujar los botones a los extremos */}
+        <div></div>
+
+        <button onClick={toggleTheme} className="theme-toggle-button">
+          {theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
+        </button>
+      </header>
+      
+      <div className="roadmap-content">
+        {contenidoRoadmap.map(renderBlock)}
+      </div>
+    </div>
+  );
+};
+
+export default RoadmapPage;
+
+================================================================================
+// ARCHIVO: src/components/Simulaciones/Accordion.jsx
+================================================================================
+
+// src/components/Simulaciones/Accordion.jsx
+import React, { useState } from 'react';
+
+const AccordionItem = ({ title, children, isOpen, onClick }) => {
+  return (
+    <div className="accordion-item">
+      <button className="accordion-title" onClick={onClick}>
+        <span className={`accordion-icon ${isOpen ? 'open' : ''}`}>▶</span>
+        {title}
+      </button>
+      <div className={`accordion-content ${isOpen ? 'open' : ''}`}>
+        <div className="accordion-content-inner">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Accordion = ({ items }) => {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const handleClick = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <div className="accordion-container">
+      {items.map((item, index) => (
+        <AccordionItem
+          key={index}
+          title={item.title}
+          isOpen={openIndex === index}
+          onClick={() => handleClick(index)}
+        >
+          {item.content}
+        </AccordionItem>
+      ))}
+    </div>
+  );
+};
+
+export default Accordion;
+
+================================================================================
+// ARCHIVO: src/components/Simulaciones/BlackScholesPage.jsx
+================================================================================
+
+import React from 'react';
+const BlackScholesPage = () => <div><p1>Superficie Black-Scholes. Para recibir los modelos quantitativos debes ser afiliado. Escribe a anyeres.atehortua@udea.edu.co  </p1></div>;
+export default BlackScholesPage;
+
+================================================================================
+// ARCHIVO: src/components/Simulaciones/CodeBlock.jsx
+================================================================================
+
+// src/components/Simulaciones/CodeBlock.jsx
+import React, { useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+const CodeBlock = ({ initialCode }) => {
+  const [fontSize, setFontSize] = useState(14);
+  const [copySuccess, setCopySuccess] = useState('');
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(initialCode);
+    setCopySuccess('¡Copiado!');
+    setTimeout(() => setCopySuccess(''), 2000);
+  };
+
+  return (
+    <div className="code-block-container">
+      <div className="code-block-toolbar">
+        <div className="font-controls">
+          <button onClick={() => setFontSize(s => Math.min(s + 1, 24))}>A+</button>
+          <button onClick={() => setFontSize(s => Math.max(s - 1, 10))}>A-</button>
+        </div>
+        <button onClick={handleCopy} className="copy-button">
+          {copySuccess || 'Copiar'}
+        </button>
+      </div>
+      <SyntaxHighlighter 
+        language="python" 
+        style={atomDark}
+        customStyle={{ fontSize: `${fontSize}px`, margin: 0 }}
+        wrapLongLines={true}
+      >
+        {initialCode}
+      </SyntaxHighlighter>
+    </div>
+  );
+};
+
+export default CodeBlock;
+
+================================================================================
+// ARCHIVO: src/components/Simulaciones/CollapsibleCell.jsx
+================================================================================
+
+// src/components/Simulaciones/CollapsibleCell.jsx
+import React, { useState } from 'react';
+import LabCell from './LabCell';
+
+const CollapsibleCell = ({ title, children, defaultOpen = false, className = '' }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <div className={`collapsible-container ${isOpen ? 'open' : ''} ${className}`}>
+      <button className="collapsible-title" onClick={() => setIsOpen(!isOpen)}>
+        <span className="collapsible-icon">▶</span>
+        {title}
+      </button>
+      <div className="collapsible-content">
+      {/* Pasamos la clase del contenedor exterior a la celda interior */}
+        <LabCell className={className}> 
+       {children}
+        </LabCell>
+      </div>
+    </div>
+  );
+};
+
+export default CollapsibleCell;
+
+================================================================================
+// ARCHIVO: src/components/Simulaciones/LabCell.jsx
+================================================================================
+
+// src/components/Simulaciones/LabCell.jsx
+import React from 'react';
+
+const LabCell = ({ children, className = '' }) => {
+  return (
+    <div className={`lab-cell ${className}`}>
+      {children}
+    </div>
+  );
+};
+
+export default LabCell;
+
+================================================================================
+// ARCHIVO: src/components/Simulaciones/MovimientoBrownianoPage.jsx
+================================================================================
+
+
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { BlockMath, InlineMath } from 'react-katex';
+
+import LabCell from './LabCell';
+import CodeBlock from './CodeBlock';
+
+import CollapsibleCell from './CollapsibleCell'; // <-- AÑADE ESTA LÍNEA
+
+
+import Accordion from './Accordion'; 
+import { accordionItems } from '../../simulaciones/contenido/movimientoBrownianoContenido.jsx'; 
+import { accordionItems2 } from '../../simulaciones/contenido/movimientoBrownianoFinanzasContenido.jsx'; 
+
+
+import './Simulaciones.css'; 
+
+const MovimientoBrownianoPage = () => {
+  const [theme, setTheme] = useState('dark');
+  const navigate = useNavigate();
+
+  const pythonCode = `# 🧩 Librerías necesarias
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import animation
+from IPython.display import HTML
+
+import matplotlib as mpl
+mpl.rcParams['animation.embed_limit'] = 53  # en MB, puedes ajustar a 50, 100, etc.
+
+# 🎯 Parámetros de simulación
+dim = 3             # Dimensión: 3D
+nump = 1000         # Número de partículas
+nums = 500         # Número de pasos de tiempo (sirve entre otras cosas para hacer que la generación del vídeo sea posible)
+dt = 0.05           # Paso temporal
+zeta = 1.0          # Coeficiente de fricción
+m = 1.0             # Masa de la partícula
+kBT = 1.0           # Temperatura (kB*T)
+std = np.sqrt(2 * kBT * zeta * dt)  # Desviación estándar de los impulsos
+np.random.seed(0)
+
+# 🧱 Inicialización de matrices
+R = np.zeros((nump, dim))
+V = np.zeros((nump, dim))
+W = np.zeros((nump, dim))
+Rs = np.zeros((nums, nump, dim))  # Posiciones
+Vs = np.zeros((nums, nump, dim))  # Velocidades
+Ws = np.zeros((nums, nump, dim))  # Impulsos (fuerzas)
+time = np.zeros(nums)
+
+# 🔁 Bucle principal de simulación
+for i in range(nums):
+    W = std * np.random.randn(nump, dim)  # Fuerza aleatoria
+    R = R + V * dt                        # Actualiza posición
+    V = V * (1 - zeta / m * dt) + W / m   # Actualiza velocidad
+    Rs[i, :, :] = R
+    Vs[i, :, :] = V
+    Ws[i, :, :] = W
+    time[i] = i * dt
+
+# 📈 Visualización 2D: eje X vs Y
+box = 80
+fig, ax = plt.subplots(figsize=(7.5, 7.5))
+ax.set_xlim(-box / 2, box / 2)
+ax.set_ylim(-box / 2, box / 2)
+ax.set_xlabel(r"$R_x$", fontsize=16)
+ax.set_ylabel(r"$R_y$", fontsize=16)
+for n in range(nump):
+    ax.plot(Rs[:, n, 0], Rs[:, n, 1], alpha=0.3)
+plt.title("Trayectorias 2D de partículas brownianas")
+plt.grid(True)
+plt.show()
+
+`;
+
+const pythonCode2 = `# 📈 Visualización 3D
+box = 80
+fig = plt.figure(figsize=(10, 10))
+ax = fig.add_subplot(111, projection='3d')
+ax.set_xlim(-box / 2, box / 2)
+ax.set_ylim(-box / 2, box / 2)
+ax.set_zlim(-box / 2, box / 2)
+ax.set_xlabel("x", fontsize=14)
+ax.set_ylabel("y", fontsize=14)
+ax.set_zlabel("z", fontsize=14)
+ax.view_init(elev=12, azim=120)
+for n in range(nump):
+    ax.plot(Rs[:, n, 0], Rs[:, n, 1], Rs[:, n, 2], alpha=0.3)
+plt.title("Trayectorias 3D de partículas brownianas")
+plt.show()
+
+`;
+
+const pythonCode3 = `from google.colab import drive
+drive.mount('/content/drive')
+
+import os
+
+video_dir = '/content/drive/My Drive/Colab_Notebooks/BookQUantPy/SimulacionMovimientoBrowniano'
+os.makedirs(video_dir, exist_ok=True)  # crea el directorio si no existe
+video_path = os.path.join(video_dir, 'langevin_simulacion.mp4')
+anim.save(video_path, fps=30, dpi=100, writer='ffmpeg')
+
+
+# 🎞️ Animación de una partícula
+fig = plt.figure(figsize=(10, 10))
+ax = fig.add_subplot(111, projection='3d')
+ax.set_xlim(-box / 2, box / 2)
+ax.set_ylim(-box / 2, box / 2)
+ax.set_zlim(-box / 2, box / 2)
+ax.set_xlabel("x", fontsize=14)
+ax.set_ylabel("y", fontsize=14)
+ax.set_zlabel("z", fontsize=14)
+ax.view_init(elev=12, azim=120)
+
+n = 0  # Partícula a animar
+particles, = ax.plot([], [], [], 'ro', ms=8, alpha=0.5)
+title = ax.text(-box/2, box/2, box/2, "", transform=ax.transAxes, va='center')
+line, = ax.plot([], [], [], 'b', lw=1.0, alpha=0.8)
+
+def init():
+    particles.set_data([], [])
+    particles.set_3d_properties([])
+    line.set_data([], [])
+    line.set_3d_properties([])
+    title.set_text("")
+    return particles, title, line
+
+def animate(i):
+    title.set_text(f"$t = {time[i]:.2f}$")
+    line.set_data(Rs[:i+1, n, 0], Rs[:i+1, n, 1])
+    line.set_3d_properties(Rs[:i+1, n, 2])
+    particles.set_data([Rs[i, n, 0]], [Rs[i, n, 1]])
+    particles.set_3d_properties([Rs[i, n, 2]])
+    return particles, title, line
+
+anim = animation.FuncAnimation(fig, animate, init_func=init, frames=nums,
+                               interval=10, blit=True, repeat=False)
+
+HTML(anim.to_jshtml())
+
+
+`;
+
+  return (
+    <div className={`lab-page ${theme}`}>
+      <header className="lab-page-header">
+        <button onClick={() => navigate(-1)} className="back-button">← Volver</button>
+        <button onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')} className="theme-toggle-button">
+          {theme === 'dark' ? 'Modo Claro' : 'Modo Oscuro'}
+        </button>
+      </header>
+      
+      <div className="lab-cells-container">
+        <LabCell>
+          <h1>Fundamentos del Movimiento Browniano</h1>
+          <Accordion items={accordionItems} />
+        </LabCell>
+
+  <CollapsibleCell title="Código: Simulación y Gráfico 2D" defaultOpen={true} >
+    <CodeBlock initialCode={pythonCode} />
+  </CollapsibleCell>
+
+  <CollapsibleCell title="Resultado: Visualización 2D" className="output-cell">
+    <img src="/sim-outputs/brownian_2d_trajectories.png" alt="Trayectorias 2D" />
+  </CollapsibleCell>
+
+  <CollapsibleCell title="Código: Gráfico 3D">
+    <CodeBlock initialCode={pythonCode2} />
+  </CollapsibleCell>
+
+  <CollapsibleCell title="Resultado: Visualización 3D"  className="output-cell">
+    <img src="/sim-outputs/Fig2.png" alt="Trayectorias 3D" />
+  </CollapsibleCell>
+
+  <CollapsibleCell title="Código: Animación 3D de una Partícula">
+    <CodeBlock initialCode={pythonCode3} />
+  </CollapsibleCell>
+
+       <CollapsibleCell title="Resultado: Visualización 3D" className="output-cell">
+    <img src="/sim-outputs/Fig3.png" alt="Trayectorias 3D" />
+  </CollapsibleCell>
+
+      <CollapsibleCell title="Resultado: Animación" className="output-cell">
+    <video controls autoPlay loop muted src="/sim-outputs/langevin_simulacion.mp4" />
+  </CollapsibleCell>
+
+        
+       
+      </div>
+    </div>
+  );
+};
+
+export default MovimientoBrownianoPage;
+
+
+
+
+
+
+================================================================================
+// ARCHIVO: src/components/Simulaciones/SimulacionCard.jsx
+================================================================================
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Simulaciones.css';
+
+const SimulacionCard = ({ sim }) => {
+  return (
+    <Link to={`/simulaciones/${sim.slug}`} className="simulacion-card">
+      <h3>{sim.titulo}</h3>
+      <p>{sim.descripcion}</p>
+      <div className="launch-button">Lanzar Laboratorio ➔</div>
+    </Link>
+  );
+};
+
+export default SimulacionCard;
+
+================================================================================
+// ARCHIVO: src/components/Simulaciones/Simulaciones.css
+================================================================================
+
+.simulaciones-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.simulaciones-header {
+  text-align: center; margin-bottom: 2.5rem; font-size: 2.5rem;
+  color: #38bdf8; border-bottom: 2px solid #38bdf8;
+  display: inline-block; padding-bottom: 0.5rem;
+  left: 50%; position: relative; transform: translateX(-50%);
+}
+.simulaciones-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+.simulacion-card {
+  background-color: #1e293b; color: #e2e8f0;
+  padding: 1.5rem; border-radius: 8px; text-decoration: none;
+  border: 1px solid #334155; transition: all 0.3s ease;
+  display: flex; flex-direction: column;
+}
+.simulacion-card:hover { transform: translateY(-5px); border-color: #38bdf8; }
+.simulacion-card h3 { color: #7dd3fc; margin-bottom: 1rem; font-size: 1.3rem; }
+.simulacion-card p { flex-grow: 1; margin-bottom: 1.5rem; color: #94a3b8; }
+.launch-button {
+  align-self: flex-end; font-weight: bold; color: #38bdf8;
+}
+
+/* --- Inicio de Estilos para CodeBlock --- */
+.code-block-container {
+  position: relative;
+  background-color: #282c34; /* Color base de atomDark */
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #4a5568;
+}
+
+.code-block-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: #21252b;
+}
+
+.font-controls button, .copy-button {
+  background: #4a5568;
+  color: #abb2bf;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 5px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+.font-controls button:hover, .copy-button:hover {
+  background: #6b7280;
+}
+.copy-button {
+  min-width: 60px; /* Para que no cambie de tamaño al mostrar "¡Copiado!" */
+}
+
+/* Estilo para la barra de scroll */
+pre::-webkit-scrollbar { width: 8px; }
+pre::-webkit-scrollbar-track { background: #21252b; }
+pre::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 4px; }
+pre::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+/* --- Fin de los Estilos para CodeBlock --- */
+
+/* --- Inicio de Estilos para Lab Page y Cells --- */
+.lab-page {
+  padding: 1rem;
+  transition: background-color 0.3s ease;
+}
+.lab-page.dark { background-color: #1a202c; }
+.lab-page.light { background-color: #f7fafc; }
+
+.lab-page-header {
+  max-width: 1200px;
+  margin: 0 auto 1rem auto;
+  display: flex;
+  justify-content: space-between;
+}
+/* Reutilizamos los estilos de botones que ya tenemos en otros CSS */
+
+.lab-cells-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.lab-cell {
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+.lab-page.dark .lab-cell {
+  background-color: #2d3748;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+.lab-page.light .lab-cell {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+  color: #1a202c;
+}
+
+/* Estilos para el texto dentro de las celdas */
+.lab-page.dark .lab-cell h1 { color: #7dd3fc; }
+.lab-page.light .lab-cell h1 { color: #0c4a6e; }
+.lab-page .lab-cell h1 { margin-bottom: 1rem; }
+/* --- Fin de Estilos para Lab Page y Cells --- */
+
+/* --- Inicio Estilos para Accordion --- */
+.accordion-container {
+  border: 1px solid;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.lab-page.dark .accordion-container { border-color: #4a5568; }
+.lab-page.light .accordion-container { border-color: #cbd5e1; }
+
+.accordion-item {
+  border-bottom: 1px solid;
+}
+.lab-page.dark .accordion-item { border-color: #4a5568; }
+.lab-page.light .accordion-item { border-color: #cbd5e1; }
+.accordion-item:last-child { border-bottom: none; }
+
+.accordion-title {
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+.lab-page.dark .accordion-title { color: #cbd5e1; }
+.lab-page.light .accordion-title { color: #2d3748; }
+.lab-page.dark .accordion-title:hover { background-color: rgba(74, 85, 104, 0.2); }
+.lab-page.light .accordion-title:hover { background-color: rgba(237, 242, 247, 0.5); }
+
+.accordion-icon {
+  display: inline-block;
+  margin-right: 0.8rem;
+  transition: transform 0.3s ease;
+}
+.accordion-icon.open {
+  transform: rotate(90deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, padding 0.4s ease;
+  padding: 0 1.5rem;
+}
+.accordion-content.open {
+  max-height: 10000px; /* Un valor grande para permitir cualquier contenido */
+  padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+}
+.accordion-content-inner {
+  border-top: 1px dashed;
+  padding-top: 1.5rem;
+}
+.lab-page.dark .accordion-content-inner { border-color: #4a5568; }
+.lab-page.light .accordion-content-inner { border-color: #cbd5e1; }
+/* --- Fin para Accordion --- */
+
+
+
+
+
+/* --- Estilos para la Celda de Visualización (Output) --- */
+.output-cell {
+  padding: 1rem;
+  text-align: center; /* <-- AÑADE ESTA LÍNEA */
+}
+.lab-page.dark .output-cell { background-color: #1e293b; }
+.lab-page.light .output-cell { background-color: #f7fafc; }
+
+.output-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.lab-page.dark .output-title { color: #94a3b8; }
+.lab-page.light .output-title { color: #4a5568; }
+
+.output-cell img, .output-cell video {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 4px;
+  background-color: white; /* Para que gráficos con fondo transparente se vean bien */
+}
+
+
+/* Estilos para celdas colapsables */
+
+/* --- Estilos para CollapsibleCell --- */
+.collapsible-container {
+  border: 1px solid;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.lab-page.dark .collapsible-container { border-color: #4a5568; }
+.lab-page.light .collapsible-container { border-color: #e2e8f0; }
+
+.collapsible-title {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+.lab-page.dark .collapsible-title { color: #cbd5e1; border-color: #4a5568; }
+.lab-page.light .collapsible-title { color: #2d3748; border-color: #e2e8f0; }
+
+.collapsible-container.open .collapsible-title {
+  border-bottom-style: solid;
+}
+.collapsible-container:not(.open) .collapsible-title {
+  border-bottom-style: none; /* Sin borde cuando está cerrado */
+}
+
+
+.collapsible-icon {
+  display: inline-block;
+  margin-right: 0.8rem;
+  transition: transform 0.3s ease;
+}
+.collapsible-container.open .collapsible-icon {
+  transform: rotate(90deg);
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out;
+}
+.collapsible-container.open .collapsible-content {
+  max-height: 10000px; /* Valor muy grande */
+}
+
+/* Hacemos que la celda interna no tenga su propio borde/padding */
+.collapsible-content .lab-cell {
+  border: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+================================================================================
+// ARCHIVO: src/components/Simulaciones/SimulacionesPage.jsx
+================================================================================
+
+import React from 'react';
+import { simulaciones } from '../../simulaciones/simulacionesData';
+import SimulacionCard from './SimulacionCard';
+import './Simulaciones.css';
+
+const SimulacionesPage = () => {
+  return (
+    <div className="simulaciones-page">
+      <h2 className="simulaciones-header">Laboratorio de Simulaciones</h2>
+      <div className="simulaciones-grid">
+        {simulaciones.map(sim => (
+          <SimulacionCard key={sim.id} sim={sim} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default SimulacionesPage;
+
+================================================================================
+// ARCHIVO: src/data/bibliotecaData.js
+================================================================================
+
+const biblioteca = [
+  {
+    id: 1,
+    titulo: "Financial Calculus",
+    autor: "Martin Baxter & Andrew Rennie",
+    descripcion: "Un texto introductorio riguroso al cálculo estocástico aplicado a finanzas, ideal para físicos y matemáticos que buscan entender la valoración de derivados desde la neutralidad al riesgo.",
+    portada: "/libros/portadas/01.png",
+    pdf: "/libros/pdfs/01-MBaxter-ARennie-FinancialCalculus_2012.pdf"
+  },
+  {
+    id: 2,
+    titulo: "Analysis, Geometry, and Modeling in Finance",
+    autor: "Pierre Henry-Labordère",
+    descripcion: "Explora métodos avanzados como geometría diferencial y teoría de Malliavin para modelar derivados financieros; ideal para quienes buscan profundidad teórica en volatilidad estocástica.",
+    portada: "/libros/portadas/02.png",
+    pdf: "/libros/pdfs/02-PierreHenry-Labordere-Analysis-Geometry-Modeling-Finance-Advanced-Methods-Option-Pricing_2008.pdf"
+  },
+  {
+    id: 3,
+    titulo: "Stochastic Calculus for Finance I: The Binomial Asset Pricing Model",
+    autor: "Steven E. Shreve",
+    descripcion: "Introduce los conceptos fundamentales de pricing en tiempo discreto usando modelos binomiales y martingalas; es la puerta de entrada al mundo de las finanzas cuantitativas.",
+    portada: "/libros/portadas/03.png",
+    pdf: "/libros/pdfs/03-Steven-Shreve-Stochastic-Calculus-Finance-I_2004.pdf"
+  },
+  {
+    id: 4,
+    titulo: "Stochastic Calculus for Finance II: Continuous-Time Models",
+    autor: "Steven E. Shreve",
+    descripcion: "Desarrolla el cálculo estocástico en tiempo continuo, incluyendo integración de Itô y modelos Black-Scholes; referencia clave para entender la teoría moderna de derivados.",
+    portada: "/libros/portadas/04.png",
+    pdf: "/libros/pdfs/04-Steven-Shreve-Stochastic-Calculus-Finance-II_2004.pdf"
+  }
+];
+
+export default biblioteca;
+
+
+================================================================================
+// ARCHIVO: src/data/posts/fisica-finanzas.js
+================================================================================
+
+// src/data/posts/fisica-finanzas.js
+
+const contenidoPost = [
+  {
+    type: 'h1',
+    content: 'Paradigmas del Modelado Financiero en la Última Década'
+  },
+  {
+    type: 'p',
+    style: 'disclaimer',
+    content: 'Este artículo ofrece una síntesis de las corrientes dominantes en la modelización de finanzas cuantitativas, con un enfoque en los desarrollos post-crisis financiera y su relevancia emergente en el ecosistema DeFi.'
+  },
+  {
+    type: 'h2',
+    content: '1. Más Allá de Black-Scholes: La Era de la Volatilidad Estocástica'
+  },
+  {
+    type: 'p',
+    content: 'El modelo de Black-Scholes-Merton, aunque fundamental, asume una volatilidad constante, una premisa que los mercados reales refutan a diario a través del "volatility smile". La primera generación de modelos avanzados, como el de Heston (1993), introdujo la volatilidad como un proceso estocástico propio, permitiendo capturar de forma más realista la dinámica del mercado.'
+  },
+  {
+    type: 'p',
+    content: 'El modelo de Heston describe el precio del activo (S) y su varianza (v) mediante un sistema de ecuaciones diferenciales estocásticas:'
+  },
+  {
+    type: 'math',
+    content: 'dS_t = r S_t dt + \\sqrt{v_t} S_t dW_t^S \\\\ dv_t = \\kappa (\\theta - v_t) dt + \\xi \\sqrt{v_t} dW_t^v'
+  },
+  {
+    type: 'p',
+    content: 'Donde κ es la tasa de reversión a la media, θ es la varianza a largo plazo, y ξ es la "volatilidad de la volatilidad". La correlación entre los ruidos Wiener (dW) es clave para generar el "skew" de volatilidad.'
+  },
+  {
+    type: 'h2',
+    content: '2. La Revolución "Rough": La Volatilidad no es Suave'
+  },
+  {
+    type: 'p',
+    content: 'Un avance significativo de la última década, liderado por Jim Gatheral y otros, es la observación empírica de que la volatilidad no solo es estocástica, sino también "rugosa" (rough). Esto significa que la volatilidad histórica es mucho menos suave de lo que sugieren los modelos de difusión clásicos. Matemáticamente, esto se modela utilizando el movimiento Browniano fraccional (fBm) con un parámetro de Hurst (H) cercano a cero (típicamente H ≈ 0.1).'
+  },
+  {
+    type: 'p',
+    content: 'El modelo rHeston (Rough Heston) es un ejemplo. La idea central es que la volatilidad futura es fuertemente dependiente de la volatilidad pasada reciente, pero esta dependencia decae rápidamente. Esto ha demostrado tener un poder predictivo y de ajuste a los datos de mercado (especialmente para opciones de corto vencimiento) muy superior a los modelos anteriores.'
+  },
+  {
+    type: 'h2',
+    content: '3. El Ascenso del Machine Learning y los Modelos No-Paramétricos'
+  },
+  {
+    type: 'p',
+    content: 'Paralelamente, el auge de la computación y los datos ha impulsado el uso de Machine Learning (ML) y Redes Neuronales (NN) en las finanzas cuantitativas. En lugar de postular un modelo paramétrico (como Heston), se utilizan NNs para "aprender" la superficie de volatilidad implícita directamente de los precios de mercado.'
+  },
+  {
+    type: 'list',
+    items: [
+      'Calibración de Modelos: Las NNs pueden calibrar modelos complejos a los precios de mercado en milisegundos, una tarea que tradicionalmente tomaba minutos u horas.',
+      'Pricing de Derivados: Se entrenan redes para mapear directamente las características de un derivado (strike, vencimiento, etc.) a su precio, evitando la resolución de complejas PDEs.',
+      'Deep Hedging: Un enfoque revolucionario donde una red neuronal aprende una estrategia de cobertura óptima directamente, minimizando el riesgo en presencia de costes de transacción y otros factores del mundo real.'
+    ]
+  },
+  {
+    type: 'p',
+    content: 'Estos métodos "libres de modelo" no asumen una dinámica subyacente, sino que la infieren de los datos, ofreciendo una flexibilidad sin precedentes.'
+  },
+  {
+    type: 'h2',
+    content: '4. La Nueva Frontera: Modelando el Ecosistema DeFi'
+  },
+  {
+    type: 'p',
+    content: 'Las Finanzas Descentralizadas (DeFi) presentan un conjunto de desafíos y oportunidades únicos para los quants. Los modelos deben ahora dar cuenta de:'
+  },
+  {
+    type: 'table',
+    headers: ['Concepto DeFi', 'Desafío de Modelado Cuantitativo'],
+    rows: [
+      ['Automated Market Makers (AMMs)', 'Modelar el "impermanent loss" y las estrategias óptimas de provisión de liquidez. La dinámica de precios no sigue un paseo aleatorio simple.'],
+      ['Protocolos de Préstamo (Lending)', 'Cuantificar el riesgo de liquidación en cascada y modelar las tasas de interés algorítmicas.'],
+      ['Derivados On-Chain', 'Valorar opciones en un entorno con altas tasas de gas, latencia y oráculos de precios imperfectos.']
+    ]
+  },
+  {
+    type: 'p',
+    content: 'La fórmula de un AMM de producto constante, como Uniswap V2, es engañosamente simple, pero su dinámica de riesgo es profundamente compleja:'
+  },
+  {
+    type: 'math',
+    content: 'x \\cdot y = k'
+  },
+  {
+    type: 'p',
+    content: 'La econofísica y el modelado basado en agentes son especialmente prometedores en este campo, ya que las reglas del sistema están codificadas y son transparentes, permitiendo simulaciones de alta fidelidad.'
+  },
+  {
+    type: 'h2',
+    content: 'Conclusión'
+  },
+  {
+    type: 'p',
+    style: 'final-note',
+    content: 'La última década ha sido testigo de una transición desde modelos paramétricos elegantes hacia enfoques más empíricos, computacionalmente intensivos y basados en datos. La llegada de DeFi no es solo un nuevo mercado para aplicar viejos modelos, sino un catalizador para una nueva generación de teorías cuantitativas que deben incorporar la mecánica explícita de los protocolos en su núcleo.'
+  }
+];
+
+export default contenidoPost;
+
+================================================================================
+// ARCHIVO: src/data/posts/geometria-diferencial.js
+================================================================================
+
+// src/data/posts/geometria-diferencial.js
+
+const contenidoPost = [
+  {
+    type: 'p',
+    style: 'disclaimer', // Un estilo especial para la nota de autoría
+    content: 'Nota del autor de QuantHashLab: El siguiente texto es una traducción, resumen y expansión del invaluable trabajo "Analysis, Geometry, and Modeling in Finance" de Pierre Henry-Labordère. El objetivo de este post es hacer más accesible y tangible este conocimiento, complementándolo con aplicaciones prácticas. Todo el crédito por la teoría original pertenece al autor.'
+  },
+  {
+    type: 'h1',
+    content: 'Introducción a la Geometría en Finanzas Cuantitativas'
+  },
+  {
+    type: 'p',
+    content: 'La modelización financiera moderna ha trascendido los modelos analíticos simples, adoptando herramientas de la física matemática y la geometría diferencial para abordar la complejidad de los mercados. Este enfoque permite obtener resultados más precisos en la valoración de opciones donde antes solo existían aproximaciones. Se presentan métodos como la descomposición espectral y la supersimetría, aplicados directamente al problema práctico de la valoración de derivados.'
+  },
+  {
+    type: 'h2',
+    content: 'El Problema Central: La Volatilidad Implícita'
+  },
+  {
+    type: 'p',
+    content: 'El modelo de Black-Scholes-Merton (BSM) es la piedra angular, pero su supuesto de volatilidad constante es una simplificación. En la práctica, el mercado asigna diferentes volatilidades a opciones con distintos precios de ejercicio (strikes) y vencimientos, creando lo que se conoce como la "superficie de volatilidad implícita". El verdadero desafío cuantitativo es "invertir" el modelo BSM: dado un precio de opción observado en el mercado, ¿cuál es la volatilidad (σ) que el mercado está implicando?'
+  },
+  {
+    type: 'p',
+    content: 'Dado que la fórmula de BSM no puede ser despejada algebraicamente para σ, se deben emplear métodos numéricos para encontrar la raíz de la siguiente ecuación:'
+  },
+  {
+    type: 'math',
+    content: 'f(\\sigma) = C_{BSM}(\\sigma) - C_{mercado} = 0'
+  },
+  {
+    type: 'h3',
+    content: 'Métodos Numéricos para Encontrar la Raíz'
+  },
+  {
+    type: 'p',
+    content: 'Existen varios métodos iterativos para resolver la ecuación anterior. La elección depende de un balance entre velocidad y estabilidad.'
+  },
+  {
+    type: 'table', // Un nuevo tipo de bloque: tabla
+    headers: ['Método', 'Característica Principal', 'Requiere'],
+    rows: [
+      ['Newton-Raphson', 'Convergencia muy rápida (cuadrática).', 'El cálculo de la derivada (Vega).'],
+      ['Bisección', 'Convergencia más lenta pero garantizada.', 'Un intervalo inicial [a, b] donde f(a) y f(b) tengan signos opuestos.'],
+    ]
+  },
+  {
+    type: 'p',
+    content: 'La derivada del precio de la opción con respecto a la volatilidad, conocida como Vega (ν), es fundamental para el método de Newton-Raphson. Su fórmula es:'
+  },
+  {
+    type: 'math',
+    content: '\\text{Vega} (\\nu) = S e^{-qT} \\phi(d_1) \\sqrt{T}'
+  },
+  {
+    type: 'h2',
+    content: 'Elección del Valor Inicial de σ'
+  },
+  {
+    type: 'p',
+    content: 'La elección de un buen valor inicial (σ₀) es crucial para la eficiencia de los métodos iterativos. Se pueden usar varios enfoques: valores típicos de mercado (e.g., 20-30% para acciones), la volatilidad histórica del activo, o fórmulas empíricas como la aproximación de Brenner-Subrahmanyam para opciones "at-the-money":'
+  },
+  {
+    type: 'math',
+    content: '\\sigma_0 \\approx \\frac{C_{market}}{S \\sqrt{T}} \\sqrt{2\\pi}'
+  },
+  {
+    type: 'p',
+    style: 'final-note',
+    content: 'Este resumen cubre los pilares para el cálculo de la volatilidad implícita. El documento completo explora en profundidad la derivación de Vega, el cálculo estocástico y las aplicaciones avanzadas.'
+  },
+  {
+    type: 'download_button', // Un nuevo tipo de bloque: botón de descarga
+    label: 'Descargar Tratado Completo (PDF)',
+    path: '/libros/pdfs/QuantPy-Completo.pdf' // <-- Asegúrate que este nombre coincida con tu archivo
+  }
+];
+
+export default contenidoPost;
+
+================================================================================
+// ARCHIVO: src/data/posts/roadmap-fisicos.js
+================================================================================
+
+// src/data/posts/roadmap-fisicos.js
+
+const contenidoRoadmap = [
+  { type: 'h1', content: 'Guía Definitiva de Trading Cuantitativo' },
+  { type: 'h3', content: 'Roadmap 2024/2025' },
+  { type: 'p', style: 'author-line', content: 'Autor: Stat Arb | Twitter: @quant_arb' },
+  { type: 'h2', content: 'Sobre la Guía' },
+  { type: 'p', content: 'El trading cuantitativo tiene fama de ser muy difícil de comenzar, y francamente eso es cierto. Incluso para profesionales, puede ser difícil determinar qué recursos valen la pena. Por ello, esta guía sirve como un “recurso de recursos”, diseñada para resaltar todo el material útil disponible. Con tanto contenido disponible, puede ser difícil saber por dónde empezar. Por ello, este año hay tres versiones de la guía:' },
+  { type: 'list', items: ['Edición Definitiva (Ultimate Edition)', 'Edición Integral (Comprehensive Edition)', 'Edición Esencial (Essential Edition)'] },
+  { type: 'p', content: 'Las diferencias entre ellas se centran en el equilibrio entre ser exhaustivo y evitar abrumar al lector. Si quieres un directorio puro de todos los recursos valiosos, la Edición Definitiva es para ti. Hemos hecho lo mejor posible para organizar las secciones, pero no hay mucha orientación sobre cómo aprenderlo. La Edición Integral busca un equilibrio cuidadoso entre presentar los recursos más importantes directamente al lector, cubrir una variedad de material y guiar sobre cómo aprenderlo.' },
+  { type: 'p', content: 'Finalmente, para quienes no saben por dónde empezar, la Edición Esencial está pensada para ustedes. Se enfoca fuertemente en cómo aprender el material y en ser lo más eficiente posible (cubriendo temas centrales en lugar de temas marginales).' },
+  { type: 'p', content: 'La Edición Integral también incluye cobertura de prerrequisitos, al igual que la Definitiva. Si ya sabes los temas de fondo (matemáticas, informática, etc.), siéntete libre de comenzar con la Esencial e ir avanzando. De lo contrario, considera empezar por la Integral. Esto no sustituye el trabajo real y la implementación. La Edición Definitiva especialmente se enfoca en catalogar los recursos disponibles, pero no puedes aprenderlos simplemente leyéndolos a la fuerza. Solo pueden mostrarte lo que no sabes que no sabes. Para un aprendizaje real, debes involucrarte con el material mediante conversación, implementación y modificación propia.' },
+  
+  { type: 'h2', content: 'Sobre el Autor' },
+  { type: 'p', content: 'Trabajo como investigador cuantitativo en el espacio de activos digitales y he liderado equipos en estrategias HFT y MFT. Tanto en mi propio fondo de cobertura como en uno más grande como jefe de investigación cuantitativa. No soy un veterano con décadas de experiencia, pero espero tener lo suficiente como para que valga la pena compartirlo.' },
+
+  { type: 'h1', content: 'Capítulo 1: Aprendizaje Automático y Trading Algorítmico' },
+  { type: 'p', content: 'Todo lo resaltado en rojo es opcional, ya que es más una repetición con añadidos del libro anterior en negro. Depende de qué tan rápido o intensamente quieras aprender. Deberías empezar con los primeros libros de texto y luego decidir si continuar con la sección de Aprendizaje Automático o la de Derivados primero. Puedes hacer ambas a la vez. Tienen intersecciones y me encantan ambas áreas, aunque tengo preferencia por la primera. Sin embargo, son bastante independientes y no requieren conocimiento de la otra para aprender.' },
+  { type: 'blockquote', content: 'Nota legal: No soy responsable si incurres en piratería y no lo recomiendo porque está mal, pero he oído que algunas personas lo usan para verificar si el contenido no es basura antes de comprar. Además, comprar el libro físico te da una estantería impresionante y algunos creen que es mejor para leer, aunque yo disfruto tanto del PDF como del formato físico (comprado directamente al autor, por supuesto).' },
+  { type: 'list_styled', title: 'Libros de Texto Principales', items: ['"Quantitative Trading" 2da edición', '"Algorithmic Trading" (opcional)', '"Machine Trading" (opcional)', '"Trading and Exchanges" - Puede omitirse si no te interesa la microestructura, pero es muy útil para evitar errores tontos.'] },
+  { type: 'blockquote', content: 'Nota: Los libros de Ernest Chan no son muy profundos pero son una introducción sencilla. Puedes hojearlos. Especialmente "Algorithmic Trading" y "Machine Trading" son tan básicos que deberían omitirse a menos que seas 100% nuevo en el campo cuantitativo.' },
+  { type: 'list_styled', title: 'Libros sobre Machine Learning (ML)', items: ['ML (1/3) Aprendizaje automático para trading algorítmico', 'ML (1/3) Dominar Python para Finanzas', 'ML (2) Finding Alphas: Enfoque cuantitativo (2da edición)', 'ML (4) Advanced Algorithmic Trading', 'ML (5) Advances in Financial Machine Learning', 'ML (6) The Elements of Statistical Learning', 'ML (7) Análisis de regresión con Python', 'ML (8) Estrategias de modelado de regresión'] },
+
+  { type: 'h1', content: 'Capítulo 2: Derivados y Trading de Volatilidad' },
+  { type: 'list_styled', title: 'Libros de Texto sobre Derivados', items: ['Derivados (1) Hull: Futures, Options and Other Derivatives', 'Derivados (1 Alternativo) Option Trading y Volatility Trading', 'Derivados (2) Positional Option Trading', 'Derivados (3) Trading Volatility'] },
+  { type: 'list_styled', title: 'Recursos Adicionales sobre Derivados', items: ['Option Volatility and Pricing', 'Trading Options Greeks', 'The Volatility Surface', 'The Volatility Smile', 'Currency Derivatives', 'Exotic Options and Hybrids'] },
+
+  { type: 'h1', content: 'Capítulo 3: Videos de YouTube' },
+  { type: 'p', content: 'Aquí hay algunos excelentes videos de Ben Felix. Honestamente, recomiendo todos sus videos, pero estos abarcan puntos clave que todos los traders deben conocer. Están muy enfocados en modelos de valuación de activos y la Hipótesis del Mercado Eficiente (EMH). Aunque prefiero modelos de Valor Esperado (EV), sigue siendo importante conocer esto.' },
+
+  { type: 'h1', content: 'Capítulo 4: Cursos' },
+  { type: 'p', content: 'En Coursera, Robert Shiller tiene un curso llamado "Financial Markets". Es gratuito sin certificado (USD $50 con certificado). También está disponible en YouTube. Es una excelente introducción a las finanzas y los mercados en general, y enseña los fundamentos básicos.' },
+
+  // ... (Se pueden añadir más capítulos)
+  
+  { type: 'p', style: 'final-note', content: 'La guía completa contiene muchos más recursos, incluyendo canales de YouTube, podcasts, plataformas de trading y temas avanzados. Descarga el PDF para acceder a todos los enlaces y al contenido completo.' },
+  { type: 'download_button', label: 'Descargar Roadmap Completo (PDF)', path: '/libros/pdfs/Roadmap-Ultimate-Edition.pdf' }
+];
+
+export default contenidoRoadmap;
+
+================================================================================
+// ARCHIVO: src/simulaciones/simulacionesData.js
+================================================================================
+
+export const simulaciones = [
+  {
+    id: 1,
+    titulo: 'Movimiento Browniano Geométrico',
+    slug: 'movimiento-browniano',
+    descripcion: 'Visualiza los caminos estocásticos que modelan los precios de activos, la base del pricing de opciones.',
+  },
+  {
+    id: 2,
+    titulo: 'Superficie de Black-Scholes-Merton',
+    slug: 'black-scholes-3d',
+    descripcion: 'Explora la superficie de precios de una opción en 3D y entiende la interacción de sus "griegas".',
+  },
+  {
+    id: 3,
+    titulo: 'Análisis de Flujo On-Chain (ETH)',
+    slug: 'flujo-onchain-eth',
+    descripcion: 'Conéctate a datos reales para analizar el flujo neto de Ethereum hacia y desde los exchanges centralizados.',
+  },
+  {
+    id: 4,
+    titulo: 'Visualizador de Impermanent Loss (AMM)',
+    slug: 'impermanent-loss',
+    descripcion: 'Comprende el riesgo fundamental de la provisión de liquidez en protocolos como Uniswap V2.',
+  },
+];
+
+================================================================================
+// ARCHIVO: src/simulaciones/contenido/movimientoBrownianoContenido.jsx
+================================================================================
+
+
+import React from 'react';
+import { BlockMath, InlineMath } from 'react-katex';
+
+
+export const accordionItems = [
+  {
+  title: 'Línea de tiempo del MB',
+  content: (
+    <>
+      <p>Una cronología de los hitos clave en el descubrimiento y formalización del Movimiento Browniano, desde la botánica hasta las finanzas de vanguardia.</p>
+      <table className="content-table">
+        <thead>
+          <tr>
+            <th>Año</th>
+            <th>Evento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1827</td>
+            <td>Robert Brown observa el movimiento errático de partículas de polen en agua.</td>
+          </tr>
+          <tr>
+            <td>1863</td>
+            <td>James Clerk Maxwell sugiere que colisiones moleculares podrían explicar el fenómeno.</td>
+          </tr>
+          <tr>
+            <td>1905</td>
+            <td>Albert Einstein formula una teoría física del movimiento browniano basada en la estadística molecular.</td>
+          </tr>
+          <tr>
+            <td>1906</td>
+            <td>Marian Smoluchowski desarrolla una teoría similar de forma independiente.</td>
+          </tr>
+          <tr>
+            <td>1908</td>
+            <td>Jean Perrin confirma experimentalmente la teoría de Einstein, validando la existencia de átomos.</td>
+          </tr>
+          <tr>
+            <td>1923</td>
+            <td>Norbert Wiener define matemáticamente el proceso de Wiener, base formal del movimiento browniano.</td>
+          </tr>
+          <tr>
+            <td>1951</td>
+            <td>Paul Lévy y otros amplían la teoría de procesos estocásticos.</td>
+          </tr>
+          <tr>
+            <td>1973</td>
+            <td>Black, Scholes y Merton aplican el movimiento browniano a las finanzas en la valoración de opciones.</td>
+          </tr>
+          <tr>
+            <td>Época actual</td>
+            <td>Se desarrollan modelos más realistas: saltos, volatilidad estocástica, browniano fraccionario, etc.</td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  )
+},
+  {
+  title: 'Movimiento Browniano en Física',
+  content: (
+    <>
+      <h3>Observación y naturaleza del movimiento browniano</h3>
+      <p>El fenómeno conocido como movimiento browniano ha fascinado a científicos durante casi dos siglos debido a su carácter errático y aparentemente caótico. Se trata del comportamiento observado en partículas microscópicas, típicamente de tamaño aproximado a 10⁻⁴ cm, suspendidas en un fluido, como el agua o el aire. Estas partículas, al ser suficientemente pequeñas, se ven afectadas por las colisiones con las moléculas del medio circundante, las cuales están en constante movimiento térmico.</p>
+      <p>Este tipo de movimiento fue documentado por primera vez en 1827 por el botánico escocés Robert Brown, quien, al observar granos de polen suspendidos en agua a través de un microscopio, notó que se desplazaban de forma continua y desordenada sin causa aparente. En su momento, Brown descartó causas vitales o biológicas para este comportamiento, ya que observó el mismo efecto en partículas inertes. Sin embargo, la naturaleza física subyacente del fenómeno permaneció sin explicación clara durante décadas.</p>
+      <p>Fue hasta el año 1905 que Albert Einstein, en uno de sus artículos más influyentes, ofreció una explicación teórica basada en la estadística molecular. Einstein propuso que el movimiento errático observado era una consecuencia directa de las colisiones aleatorias e independientes entre las partículas suspendidas y las moléculas del fluido, las cuales, aunque invisibles al microscopio, ejercen una fuerza neta fluctuante que impulsa a la partícula en diferentes direcciones. Su análisis no solo ofrecía una explicación teórica al movimiento observado por Brown, sino que también permitía predecir cuantitativamente la magnitud del desplazamiento medio cuadrático de una partícula en función del tiempo, estableciendo así un vínculo entre la mecánica estadística y la observación experimental.</p>
+      <p>Desde esta perspectiva, una partícula sólida suspendida en un fluido se encuentra en equilibrio térmico, pero experimenta una fuerza neta aleatoria resultado del desequilibrio momentáneo entre las innumerables colisiones de las moléculas del fluido con su superficie. Esta fuerza fluctuante es la responsable del movimiento irregular de la partícula, el cual no cesa mientras exista agitación térmica.</p>
+      <p>El movimiento browniano, por tanto, se constituye como una manifestación directa de la estructura molecular de la materia. Es una evidencia empírica del comportamiento microscópico de los átomos y moléculas, y se ha convertido en una piedra angular tanto para el desarrollo de la física estadística como para la validación del modelo cinético de los gases.</p>
+    
+      <h3 style={{ marginTop: '2rem' }}>Descripción dinámica del movimiento browniano: la ecuación de Langevin</h3>
+
+<p>Para profundizar en la dinámica de una partícula sometida al movimiento browniano, es necesario ir más allá de su desplazamiento medio y considerar las fuerzas que actúan sobre ella. Una de las formulaciones más influyentes es la introducida por Paul Langevin en 1908, conocida como la <strong>ecuación de Langevin</strong>.</p>
+      
+<p>Sea <strong><i>R(t)</i></strong> la posición de la partícula en el tiempo <strong><i>t</i></strong>, y <strong><i>V(t)</i></strong> su velocidad. La partícula esférica, con masa <strong><i>m</i></strong> y radio <strong><i>a</i></strong>, se encuentra inmersa en un fluido y experimenta dos tipos principales de fuerzas:</p>
+<ul>
+  <li>Una fuerza de fricción proporcional y opuesta a la velocidad, de la forma -<i>ζ </i><strong>V</strong>, donde <strong><i>ζ</i></strong> es el coeficiente de fricción.</li>
+  <li>Una fuerza aleatoria <strong><i>F(t)</i></strong>, que representa el efecto agregado de las múltiples colisiones microscópicas con las moléculas del fluido. Esta fuerza varía aleatoriamente en el tiempo.</li>
+</ul>
+
+<p>Con estos elementos, la ecuación de movimiento toma la forma:</p>
+<BlockMath math={'m \\frac{d\\mathbf{V}}{dt} = -\\zeta \\mathbf{V} + \\mathbf{F}(t)'} />
+
+<p>Esta es la <strong>ecuación de Langevin</strong>. Describe cómo la velocidad de la partícula evoluciona bajo la influencia de una disipación determinista (fricción) y una agitación aleatoria (fuerza de ruido térmico).</p>
+      
+<p>El coeficiente de fricción <i>ζ</i> puede estimarse mediante la fórmula de Stokes para una partícula esférica de radio <i>a</i> en un fluido de viscosidad <i>η</i>:</p>
+<BlockMath math={'\\zeta = 6\\pi \\eta a'} />
+
+<p>Desde el punto de vista físico, esta formulación permite modelar el equilibrio dinámico entre pérdida de energía por fricción y ganancia de energía debido al bombardeo aleatorio del entorno. En el régimen estacionario, la distribución de velocidades converge a una distribución de Maxwell-Boltzmann, coherente con la termodinámica.</p>
+
+<p>La ecuación de Langevin es un puente entre la mecánica clásica y la estadística, y ha dado origen a desarrollos fundamentales como el cálculo estocástico, el teorema de fluctuación-disipación y las ecuaciones de Fokker–Planck, que describen la evolución de la distribución de probabilidad asociada a estas trayectorias.</p>
+
+</>
+  )
+},
+  {
+  title: 'Simulación numérica y propiedades estadísticas de la fuerza aleatoria',
+  content: (
+    <>
+      <h3>Discretización estocástica: Euler frente a Wiener</h3>
+      
+      <h4 className="accordion-subsection-title">Limitaciones del método de Euler clásico</h4>
+      <p>Cuando se desea resolver numéricamente la ecuación de Langevin, una estrategia común en ecuaciones diferenciales deterministas es emplear el método de Euler, que aproxima una integral como el producto entre el valor del integrando en el extremo inicial y el paso de integración <i>Δt</i>. En particular, para la ecuación de posición:</p>
+      <BlockMath math={'\\mathbf{R}_{i+1} = \\mathbf{R}_i + \\int_{t_i}^{t_{i+1}} \\mathbf{V}(t) \\, dt \\approx \\mathbf{R}_i + \\mathbf{V}_i \\Delta t'} />
+      <p>y para la velocidad:</p>
+      <BlockMath math={'\\mathbf{V}_{i+1} = \\mathbf{V}_i + \\int_{t_i}^{t_{i+1}} \\left( -\\frac{\\zeta}{m} \\mathbf{V}(t) + \\frac{1}{m} \\mathbf{F}(t) \\right) dt'} />
+      <p>Una tentación natural sería suponer que la fuerza aleatoria <i><b>F(t)</b></i> puede tratarse como una función suave y reemplazar su integral por una simple multiplicación:</p>
+      <BlockMath math={'\\int_{t_i}^{t_{i+1}} \\mathbf{F}(t) \\, dt \\overset{?}{\\approx} \\mathbf{F}_i \\Delta t'} />
+      <p>Sin embargo, esta aproximación es incorrecta. A diferencia de las funciones deterministas, la fuerza <i><b>F(t)</b></i> es un proceso estocástico de tipo ruido blanco, es decir, presenta valores altamente variables en escalas temporales infinitesimales y carece de correlación entre instantes distintos. Esto se expresa matemáticamente como:</p>
+      <BlockMath math={'\\langle \\mathbf{F}(t) \\cdot \\mathbf{F}(t\') \\rangle = 2 k_B T \\zeta \\, \\delta(t - t\')'} />
+      <p>Esto implica que el producto <i><b>F</b><sub>i</sub>Δt</i> no reproduce el comportamiento real de la integral, ya que esta fuerza no puede ser evaluada como un valor puntual constante. En rigor, la integral de <i><b>F(t)</b></i> debe tratarse como una integral estocástica y no como una Riemann clásica. Esta observación fundamental motiva el uso del formalismo de Wiener.</p>
+
+      <h4 className="accordion-subsection-title">Reformulación mediante el proceso de Wiener</h4>
+      <p>El proceso de Wiener <i>W(t)</i>, o movimiento browniano, es la herramienta matemática que permite representar de forma coherente el efecto acumulativo de una fuerza aleatoria delta-correlacionada. En una formulación numérica, este proceso se introduce a través de incrementos aleatorios Δ<b><i>W</i></b><sub>i</sub>, tales que:</p>
+      <BlockMath math={'\\langle \\Delta \\mathbf{W}_i \\rangle = 0, \\qquad \\langle \\Delta \\mathbf{W}_i \\cdot \\Delta \\mathbf{W}_j \\rangle = 2 k_B T \\zeta \\Delta t \\, \\delta_{ij}'} />
+      <p>Estos incrementos representan los impulsos acumulativos durante un intervalo temporal <i>Δt</i>, y su varianza está controlada por la temperatura y la fricción, como exige la relación de fluctuación-disipación.</p>
+      <p>Así, la integral (de impulsos) estocástica de la fuerza se reemplaza por:</p>
+      <BlockMath math={'\\int_{t_i}^{t_{i+1}} \\mathbf{F}(t) \\, dt \\longrightarrow \\Delta \\mathbf{W}_i'} />
+      <p>Esto permite expresar la ecuación de Langevin discretizada de manera correcta como:</p>
+      <BlockMath math={'\\begin{aligned} \\mathbf{V}_{i+1} &= \\left( 1 - \\frac{\\zeta}{m} \\Delta t \\right) \\mathbf{V}_i + \\frac{1}{m} \\Delta \\mathbf{W}_i \\\\ \\mathbf{R}_{i+1} &= \\mathbf{R}_i + \\mathbf{V}_i \\Delta t \\end{aligned}'} />
+      <p>Esta forma asegura que la evolución temporal incorpore correctamente tanto la disipación como las fluctuaciones térmicas, respetando las propiedades estadísticas fundamentales del sistema.</p>
+
+      <h4 className="accordion-subsection-title">Comentario final</h4>
+      <p>Es fundamental destacar que la fuerza <i><b>F(t)</b></i> no es una función suave, sino una variable aleatoria con estructura matemática específica. Su tratamiento riguroso requiere el uso de cálculo estocástico, donde el proceso de Wiener es el análogo estocástico del incremento infinitesimal. Sin esta reinterpretación, cualquier integración numérica carecería de validez física y conduciría a resultados erróneos respecto a las propiedades térmicas del sistema simulado.</p>
+      
+      <hr style={{margin: '2rem 0'}} />
+
+      <h3>Simulación del movimiento browniano en 3D mediante integración estocástica</h3>
+      <p>En este capítulo se implementa una simulación numérica completa del movimiento browniano tridimensional de múltiples partículas, utilizando la ecuación de Langevin e integración temporal tipo Euler con ruido térmico. La simulación está desarrollada en Python y ejecutada en Google Colab.</p>
+
+      <h4 className="accordion-subsection-title">Ecuación de Langevin discretizada</h4>
+      <p>La versión numérica de la ecuación de Langevin, en una dimensión cualquiera, es:</p>
+      <BlockMath math={'\\mathbf{V}_{i+1} = \\left( 1 - \\frac{\\zeta}{m} \\Delta t \\right) \\mathbf{V}_i + \\frac{1}{m} \\Delta \\mathbf{W}_i'} />
+      <BlockMath math={'\\mathbf{R}_{i+1} = \\mathbf{R}_i + \\mathbf{V}_i \\Delta t'} />
+      <p>donde Δ<b><i>W</i></b><sub>i</sub> ~ <i>N(0, 2k<sub>B</sub>TζΔt)</i> representa el impulso aleatorio acumulado en el intervalo <i>Δt</i>, modelado como un incremento del proceso de Wiener.</p>
+
+      <h4 className="accordion-subsection-title">Implementación computacional</h4>
+      <p>La simulación se lleva a cabo para <i>N = 1000</i> partículas en <i>d = 3</i> dimensiones durante 500 pasos de tiempo. En cada paso:</p>
+      <ol>
+        <li>Se generan vectores aleatorios gausianos para modelar la fuerza estocástica.</li>
+        <li>Se actualizan las velocidades y posiciones según la discretización anterior.</li>
+        <li>Se almacenan los resultados para visualización posterior.</li>
+      </ol>
+    </>
+  )
+},
+  
+];
+
+================================================================================
+// ARCHIVO: src/simulaciones/contenido/movimientoBrownianoFinanzasContenido.jsx
+================================================================================
+
+
+import React from 'react';
+import { BlockMath, InlineMath } from 'react-katex';
+
+
+export const accordionItems2 = [
+  {
+  title: 'Historia del Movimiento Browniano en Finanzas',
+  content: (
+    <>
+    </>
+    
+    )
+},
+  {
+  title: 'Ecuación principal en finanzas',
+  content: (
+    <>
+    </>
+    
+     )
+},
+  {
+  title: 'Discretización y simulación numérica de la ecuación principal',
+  content: (
+    <>
+    </>
+    
+  )
+},
+
+{
+  title: 'Simulador',
+  content: (
+    <>
+    </>
+    
+  )
+},
+
+];
+

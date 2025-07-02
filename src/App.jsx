@@ -19,7 +19,7 @@ import BlackScholesPage from './components/Simulaciones/BlackScholesPage';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/quanthashlab">
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} /> 
