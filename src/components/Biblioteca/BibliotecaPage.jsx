@@ -17,7 +17,7 @@ return (
           ← Volver
         </button>
         
-        <h2 className="biblioteca-header" style={{ margin: 0, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+        <h2 className="biblioteca-header" style={{ margin: 0,  transform: 'translateX(-14%)' }}>
           Biblioteca Quant
         </h2>
 
