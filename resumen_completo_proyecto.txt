@@ -477,7 +477,7 @@ import BlackScholesPage from './components/Simulaciones/BlackScholesPage';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/quanthashlab">
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} /> 
@@ -2463,6 +2463,8 @@ export default LabCell;
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BlockMath, InlineMath } from 'react-katex';
+import { publicUrl } from '../../utils/paths';
+
 
 import LabCell from './LabCell';
 import CodeBlock from './CodeBlock';
@@ -3494,4 +3496,24 @@ export const accordionItems2 = [
 },
 
 ];
+
+================================================================================
+// ARCHIVO: src/utils/paths.js
+================================================================================
+
+// src/utils/paths.js
+
+// Obtiene la ruta base desde la configuración de Vite.
+// En desarrollo, será '/'. En producción, será '/quanthashlab/'.
+const BASE_PATH = import.meta.env.BASE_URL;
+
+/**
+ * Construye una ruta correcta a un archivo en la carpeta 'public'.
+ * @param {string} assetPath - La ruta al archivo desde la carpeta 'public', sin la barra inicial.
+ * @returns {string} La ruta completa y correcta.
+ */
+export const publicUrl = (assetPath) => {
+  // Asegurarse de que no haya barras dobles
+  return `${BASE_PATH}${assetPath}`.replace(/\/\/+/g, '/');
+};
 

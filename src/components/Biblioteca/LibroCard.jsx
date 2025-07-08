@@ -1,6 +1,7 @@
 // src/components/Biblioteca/LibroCard.jsx
 import React from 'react';
 import './Biblioteca.css';
+import { publicUrl } from '../../utils/paths';
 
 const LibroCard = ({ libro }) => {
   const { titulo, autor, descripcion, portada, pdf } = libro;
@@ -8,7 +9,7 @@ const LibroCard = ({ libro }) => {
   return (
     <div className="libro-card">
       <div className="libro-card-portada">
-        <img src={portada} alt={`Portada de ${titulo}`} />
+        <img src={publicUrl(portada)} alt={`Portada de ${titulo}`} />
       </div>
       <div className="libro-card-info">
         <h3 className="libro-titulo">{titulo}</h3>

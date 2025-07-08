@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BlockMath, InlineMath } from 'react-katex';
+import { publicUrl } from '../../utils/paths';
+
 
 import LabCell from './LabCell';
 import CodeBlock from './CodeBlock';
@@ -165,27 +167,28 @@ HTML(anim.to_jshtml())
   </CollapsibleCell>
 
   <CollapsibleCell title="Resultado: Visualización 2D" className="output-cell">
-    <img src="/sim-outputs/brownian_2d_trajectories.png" alt="Trayectorias 2D" />
-  </CollapsibleCell>
+  <img src={publicUrl('sim-outputs/brownian_2d_trajectories.png')} alt="Trayectorias 2D" />
+  </CollapsibleCell>    
+
 
   <CollapsibleCell title="Código: Gráfico 3D">
     <CodeBlock initialCode={pythonCode2} />
   </CollapsibleCell>
 
   <CollapsibleCell title="Resultado: Visualización 3D"  className="output-cell">
-    <img src="/sim-outputs/Fig2.png" alt="Trayectorias 3D" />
+  <img src={publicUrl('sim-outputs/Fig2.png')} alt="Trayectorias 3D" />
   </CollapsibleCell>
 
   <CollapsibleCell title="Código: Animación 3D de una Partícula">
     <CodeBlock initialCode={pythonCode3} />
   </CollapsibleCell>
 
-       <CollapsibleCell title="Resultado: Visualización 3D" className="output-cell">
-    <img src="/sim-outputs/Fig3.png" alt="Trayectorias 3D" />
+  <CollapsibleCell title="Resultado: Visualización 3D" className="output-cell">
+  <img src={publicUrl('sim-outputs/Fig3.png')} alt="Trayectorias 3D" />
   </CollapsibleCell>
 
       <CollapsibleCell title="Resultado: Animación" className="output-cell">
-    <video controls autoPlay loop muted src="/sim-outputs/langevin_simulacion.mp4" />
+    <video controls autoPlay loop muted src={publicUrl('sim-outputs/langevin_simulacion.mp4')}/>
   </CollapsibleCell>
 
         

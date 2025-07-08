@@ -3,6 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Lecturas.css'; // Importa estilos
+import { publicUrl } from '../../utils/paths';
 
 const LecturaCard = ({ titulo, descripcion, imagen, slug }) => {
   // Esta es la lógica nueva:
@@ -16,7 +17,7 @@ const LecturaCard = ({ titulo, descripcion, imagen, slug }) => {
     // Usamos la variable 'targetUrl' que acabamos de crear.
     <Link to={targetUrl} className="lectura-card-link">
       <div className="lectura-card">
-        <img src={imagen} alt={titulo} className="lectura-img" />
+        <img src={publicUrl(imagen)} alt={titulo} className="lectura-img" />
         <h3 className="lectura-title">{titulo}</h3>
         <p className="lectura-desc">{descripcion}</p>
       </div>
