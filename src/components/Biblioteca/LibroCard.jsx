@@ -1,7 +1,9 @@
 // src/components/Biblioteca/LibroCard.jsx
 import React from 'react';
 import './Biblioteca.css';
+
 import { publicUrl } from '../../utils/paths';
+
 
 const LibroCard = ({ libro }) => {
   const { titulo, autor, descripcion, portada, pdf } = libro;

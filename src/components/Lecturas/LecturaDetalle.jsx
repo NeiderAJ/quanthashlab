@@ -6,7 +6,6 @@ import lecturasData from './data/lecturasData';
 import { InlineMath, BlockMath } from 'react-katex'; // Importamos el componente de KaTeX
 import './LecturaDetalle.css'; // Crearemos este archivo de estilos a continuación
 
-import { publicUrl } from '../../utils/paths';
 
 const LecturaDetalle = () => {
   const [theme, setTheme] = useState('light'); // 'light' por defecto
@@ -38,7 +37,8 @@ return (
       </button>
       
       <div className="header-main-content">
-        <img src={publicUrl(lectura.imagen)} alt="" className="lectura-thumbnail-img" />
+        <img src={lectura.imagen} alt="" className="lectura-thumbnail-img" />
+
         <h1>{lectura.titulo}</h1>
       </div>
 
