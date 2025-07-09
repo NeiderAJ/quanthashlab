@@ -145,6 +145,38 @@ if __name__ == '__main__':
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+
+    <script type="text/javascript">
+      (function(l) {
+        if (l.search) {
+          var q = {};
+          l.search.slice(1).split('&').forEach(function(v) {
+            var a = v.split('=');
+            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+          });
+          if (q.p !== undefined) {
+            window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + (q.p || '') +
+              (q.q ? ('?' + q.q) : '') +
+              l.hash
+            );
+          }
+        }
+      }(window.location))
+    </script>
+    <!-- Fin del script de redirección -->
+  </head>
+  <body>
+
+
+
+
+
+
+
+
+
+
   </head>
   <body>
     <div id="root"></div>
@@ -158,7 +190,6 @@ if __name__ == '__main__':
 ================================================================================
 
 {
-  "homepage": "https://NeiderAJ.github.io/quanthashlab/",
   "name": "mi-blog-vite",
   "private": true,
   "version": "0.0.0",
@@ -214,17 +245,28 @@ export default defineConfig({
 // ARCHIVO: public/404.html
 ================================================================================
 
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <meta charset="utf-8">
+    <title>Single Page Apps for GitHub Pages</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      // Este script captura la ruta de la página 404 y la convierte
+      // en parte de la URL de redirección a index.html.
+      var segmentCount = 0;
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + segmentCount).join('/') + '/?p=/' +
+        l.pathname.slice(1).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
 
@@ -1544,20 +1586,37 @@ import React from 'react';
 import bibliotecaData from '../../data/bibliotecaData';
 import LibroCard from './LibroCard';
 import './Biblioteca.css';
+import { useNavigate } from 'react-router-dom';
 
 const BibliotecaPage = () => {
-  return (
-    <div className="biblioteca-page">
-      <div style={{ textAlign: 'center' }}>
-        <h2 className="biblioteca-header">Biblioteca Quant</h2>
-      </div>
-      <div className="biblioteca-grid">
-        {bibliotecaData.map((libro) => (
-          <LibroCard key={libro.id} libro={libro} />
-        ))}
-      </div>
+    const navigate = useNavigate(); // <-- AÑADE ESTA LÍNEA
+
+return (
+  <div className="biblioteca-page">
+    {/* --- NUEVO LAYOUT DE CABECERA --- */}
+    <div className="lectura-detalle-container" style={{ maxWidth: '1200px', padding: '0 12.5rem', margin: '0 auto 2rem auto', background: 'none' }}>
+      <header className="lectura-detalle-header" style={{ borderBottom: 'none' }}>
+        <button onClick={() => navigate(-1)} className="back-button">
+          ← Volver
+        </button>
+        
+        <h2 className="biblioteca-header" style={{ margin: 0,  transform: 'translateX(-14%)' }}>
+          Biblioteca Quant
+        </h2>
+
+        {/* Div vacío para mantener el balance y empujar el título al centro */}
+        <div></div>
+      </header>
     </div>
-  );
+
+    {/* --- El grid de libros se mantiene igual --- */}
+    <div className="biblioteca-grid">
+      {bibliotecaData.map((libro) => (
+        <LibroCard key={libro.id} libro={libro} />
+      ))}
+    </div>
+  </div>
+);
 };
 
 export default BibliotecaPage;
@@ -1570,13 +1629,16 @@ export default BibliotecaPage;
 import React from 'react';
 import './Biblioteca.css';
 
+import { publicUrl } from '../../utils/paths';
+
+
 const LibroCard = ({ libro }) => {
   const { titulo, autor, descripcion, portada, pdf } = libro;
 
   return (
     <div className="libro-card">
       <div className="libro-card-portada">
-        <img src={portada} alt={`Portada de ${titulo}`} />
+        <img src={publicUrl(portada)} alt={`Portada de ${titulo}`} />
       </div>
       <div className="libro-card-info">
         <h3 className="libro-titulo">{titulo}</h3>
@@ -1637,7 +1699,7 @@ const LecturaCard = ({ titulo, descripcion, imagen, slug }) => {
     // Usamos la variable 'targetUrl' que acabamos de crear.
     <Link to={targetUrl} className="lectura-card-link">
       <div className="lectura-card">
-        <img src={imagen} alt={titulo} className="lectura-img" />
+       <img src={imagen} alt={titulo} className="lectura-img" />
         <h3 className="lectura-title">{titulo}</h3>
         <p className="lectura-desc">{descripcion}</p>
       </div>
@@ -1914,6 +1976,7 @@ import lecturasData from './data/lecturasData';
 import { InlineMath, BlockMath } from 'react-katex'; // Importamos el componente de KaTeX
 import './LecturaDetalle.css'; // Crearemos este archivo de estilos a continuación
 
+
 const LecturaDetalle = () => {
   const [theme, setTheme] = useState('light'); // 'light' por defecto
   const navigate = useNavigate(); // Hook para la navegación
@@ -1945,6 +2008,7 @@ return (
       
       <div className="header-main-content">
         <img src={lectura.imagen} alt="" className="lectura-thumbnail-img" />
+
         <h1>{lectura.titulo}</h1>
       </div>
 
@@ -2628,27 +2692,28 @@ HTML(anim.to_jshtml())
   </CollapsibleCell>
 
   <CollapsibleCell title="Resultado: Visualización 2D" className="output-cell">
-    <img src="/sim-outputs/brownian_2d_trajectories.png" alt="Trayectorias 2D" />
-  </CollapsibleCell>
+  <img src={publicUrl('sim-outputs/brownian_2d_trajectories.png')} alt="Trayectorias 2D" />
+  </CollapsibleCell>    
+
 
   <CollapsibleCell title="Código: Gráfico 3D">
     <CodeBlock initialCode={pythonCode2} />
   </CollapsibleCell>
 
   <CollapsibleCell title="Resultado: Visualización 3D"  className="output-cell">
-    <img src="/sim-outputs/Fig2.png" alt="Trayectorias 3D" />
+  <img src={publicUrl('sim-outputs/Fig2.png')} alt="Trayectorias 3D" />
   </CollapsibleCell>
 
   <CollapsibleCell title="Código: Animación 3D de una Partícula">
     <CodeBlock initialCode={pythonCode3} />
   </CollapsibleCell>
 
-       <CollapsibleCell title="Resultado: Visualización 3D" className="output-cell">
-    <img src="/sim-outputs/Fig3.png" alt="Trayectorias 3D" />
+  <CollapsibleCell title="Resultado: Visualización 3D" className="output-cell">
+  <img src={publicUrl('sim-outputs/Fig3.png')} alt="Trayectorias 3D" />
   </CollapsibleCell>
 
       <CollapsibleCell title="Resultado: Animación" className="output-cell">
-    <video controls autoPlay loop muted src="/sim-outputs/langevin_simulacion.mp4" />
+    <video controls autoPlay loop muted src={publicUrl('sim-outputs/langevin_simulacion.mp4')}/>
   </CollapsibleCell>
 
         
@@ -3502,18 +3567,14 @@ export const accordionItems2 = [
 ================================================================================
 
 // src/utils/paths.js
+const BASE_URL = import.meta.env.BASE_URL;
 
-// Obtiene la ruta base desde la configuración de Vite.
-// En desarrollo, será '/'. En producción, será '/quanthashlab/'.
-const BASE_PATH = import.meta.env.BASE_URL;
-
-/**
- * Construye una ruta correcta a un archivo en la carpeta 'public'.
- * @param {string} assetPath - La ruta al archivo desde la carpeta 'public', sin la barra inicial.
- * @returns {string} La ruta completa y correcta.
- */
-export const publicUrl = (assetPath) => {
-  // Asegurarse de que no haya barras dobles
-  return `${BASE_PATH}${assetPath}`.replace(/\/\/+/g, '/');
+export const publicUrl = (path) => {
+  // Si la ruta ya es absoluta (http), no la toques
+  if (path.startsWith('http')) {
+    return path;
+  }
+  // Une la base y la ruta, y limpia las barras dobles
+  return (BASE_URL + path).replace(/\/\/+/g, '/');
 };
 
