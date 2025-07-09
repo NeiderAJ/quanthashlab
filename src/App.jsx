@@ -1,6 +1,6 @@
 // src/App.jsx
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from "./components/Layout";
 import Home from "./components/Home";      
 
@@ -19,7 +19,7 @@ import BlackScholesPage from './components/Simulaciones/BlackScholesPage';
 
 function App() {
   return (
-    <Router basename="/quanthashlab">
+    <Router >
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} /> 
