@@ -1,0 +1,102 @@
+/* src/components/ChatIA/ChatPage.css */
+
+.chat-page-container {
+  /* 1. Intenta ocupar el 90% del ancho de su contenedor padre.
+     'vw' significa "viewport width" (ancho de la ventana). */
+  width: 90vw; 
+
+  /* 2. PERO, nunca te hagas más ancho de 1200px. 
+     Esto evita que se estire demasiado en pantallas 4K.
+     Puedes ajustar este valor. */
+  max-width: 1200px;
+
+  /* 3. El 'margin: 2rem auto' sigue siendo crucial para centrar la caja
+     horizontalmente y darle espacio vertical. */
+  margin: 2rem auto;
+
+  /* ... el resto de tus estilos (border, box-shadow, etc.) se quedan igual ... */
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  color: #f0e4e2;
+  border: 1px solid #334155;
+}
+
+/* --- Estilos para el Selector de Modo (Imagen 2) --- */
+
+.mode-selector-container {
+  text-align: center;
+}
+
+.chat-title {
+  color: #38bdf8;
+  font-size: 2.2rem;
+}
+
+.chat-subtitle {
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mode-selection-prompt {
+  margin-top: 2.5rem;
+  font-weight: bold;
+  color: #cbd5e1;
+}
+
+.mode-options {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.mode-card {
+  background-color: #334155;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #475569;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-card:hover {
+  transform: translateY(-5px);
+  border-color: #38bdf8;
+  box-shadow: 0 5px 15px rgba(56, 189, 248, 0.1);
+}
+
+.mode-card h3 {
+  color: #7dd3fc;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.mode-card p {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.mode-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mode-card.disabled:hover {
+  transform: none;
+  border-color: #475569;
+  box-shadow: none;
+}
+
+/* Estilo para el placeholder del chat que construiremos después */
+.chat-interface-placeholder {
+    padding: 2rem;
+    text-align: center;
+    border: 2px dashed #475569;
+    border-radius: 8px;
+}

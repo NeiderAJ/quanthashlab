@@ -217,3 +217,35 @@ body {
     padding: 0.5rem !important; /* Usamos !important para sobreescribir el estilo en línea */
   }
 }
+
+
+
+/* En src/App.css */
+
+.navbar-user-email {
+  margin: 0 1rem;
+  color: #94a3b8; /* Un gris claro para que no sea tan prominente */
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.navbar-button {
+  margin: 0 1rem;
+  padding: 0.4rem 1rem;
+  background-color: transparent;
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Cambria', serif;
+  font-style: italic;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.navbar-button:hover {
+  background-color: #38bdf8;
+  color: #1e293b;
+}
+
+

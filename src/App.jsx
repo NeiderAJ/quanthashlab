@@ -16,6 +16,12 @@ import RoadmapPage from './components/Roadmap/RoadmapPage';
 import MovimientoBrownianoPage from './components/Simulaciones/MovimientoBrownianoPage';
 import BlackScholesPage from './components/Simulaciones/BlackScholesPage';
 
+import ChatPage from './components/ChatIA/ChatPage'; // <-- AÑADIR IMPORT
+
+import AuthPage from './components/Auth/AuthPage';
+
+
+
 
 function App() {
   return (
@@ -37,6 +43,8 @@ function App() {
           <Route path="/nosotros" element={<h2>Sobre el founder puedes visitar su Online-CV: 
             https://storage.googleapis.com/neiderjimenez/index.html
           </h2>} />
+          <Route path="/analyzer" element={<ChatPage />} />
+           <Route path="/login" element={<AuthPage />} />
         </Routes>
       </Layout>
     </Router>

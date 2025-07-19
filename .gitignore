@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Ignorar la configuración de Firebase
+src/firebase/config.js
