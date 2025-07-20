@@ -1,22 +1,22 @@
+/// src/pages/Simulaciones/MovimientoBrownianoPage.jsx
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BlockMath, InlineMath } from 'react-katex';
 import { publicUrl } from '../../utils/paths';
 
+// --- COMPONENTES REUTILIZABLES ---
+import LabCell from '../../components/LabCell';
+import CodeBlock from '../../components/CodeBlock';
+import CollapsibleCell from '../../components/CollapsibleCell';
+import Accordion from '../../components/Accordion';
 
-import LabCell from './LabCell';
-import CodeBlock from './CodeBlock';
+// --- DATOS Y ESTILOS ---
+// CORRECCIÓN: Apuntamos a la carpeta 'simulaciones/contenido' que está dentro de 'src'
+import { accordionItems } from '../../simulaciones/contenido/movimientoBrownianoContenido.jsx';
+import { accordionItems2 } from '../../simulaciones/contenido/movimientoBrownianoFinanzasContenido.jsx';
+import './Simulaciones.css';
 
-import CollapsibleCell from './CollapsibleCell'; // <-- AÑADE ESTA LÍNEA
-
-
-import Accordion from './Accordion'; 
-import { accordionItems } from '../../simulaciones/contenido/movimientoBrownianoContenido.jsx'; 
-import { accordionItems2 } from '../../simulaciones/contenido/movimientoBrownianoFinanzasContenido.jsx'; 
-
-
-import './Simulaciones.css'; 
 
 const MovimientoBrownianoPage = () => {
   const [theme, setTheme] = useState('dark');

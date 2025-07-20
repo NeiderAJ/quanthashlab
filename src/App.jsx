@@ -1,24 +1,21 @@
 // src/App.jsx
 import './App.css';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from "./components/Layout";
-import Home from "./components/Home";      
 
-import LecturasPage from "./components/Lecturas/LecturasPage";
-import LecturaDetalle from "./components/Lecturas/LecturaDetalle"; // <-- AÑADE ESTA LÍNEA
-
-import AcademiaPage from "./components/Academia/AcademiaPage";
-import SimulacionesPage from "./components/Simulaciones/SimulacionesPage";
-import EconofisicaPage from "./components/Econofisica/EconofisicaPage";
-import BibliotecaPage from './components/Biblioteca/BibliotecaPage';
-import RoadmapPage from './components/Roadmap/RoadmapPage';
-
-import MovimientoBrownianoPage from './components/Simulaciones/MovimientoBrownianoPage';
-import BlackScholesPage from './components/Simulaciones/BlackScholesPage';
-
-import ChatPage from './components/ChatIA/ChatPage'; // <-- AÑADIR IMPORT
-
-import AuthPage from './components/Auth/AuthPage';
+// Rutas corregidas
+import Layout from "./layouts/Layout";
+import Home from "./pages/Home/HomePage";
+import LecturasPage from "./pages/Lecturas/LecturasPage";
+import LecturaDetalle from "./pages/Lecturas/LecturaDetalle";
+import AcademiaPage from "./pages/Academia/AcademiaPage";
+import SimulacionesPage from "./pages/Simulaciones/SimulacionesPage";
+import EconofisicaPage from "./pages/Econofisica/EconofisicaPage";
+import BibliotecaPage from './pages/Biblioteca/BibliotecaPage';
+import RoadmapPage from './pages/Roadmap/RoadmapPage';
+import MovimientoBrownianoPage from './pages/Simulaciones/MovimientoBrownianoPage';
+import BlackScholesPage from './pages/Simulaciones/BlackScholesPage';
+import ChatPage from './pages/Chat/ChatPage';
+import AuthPage from './pages/Auth/AuthPage';
 
 
 

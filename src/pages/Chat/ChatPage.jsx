@@ -20,14 +20,14 @@ const ChatPage = () => {
   // La función para renderizar el contenido también está perfecta
   const renderContent = () => {
     switch (selectedMode) {
+    
       case 'consulta_simple':
         // Le pasamos una función para volver al menú de opciones
         return <SimpleChatInterface onBack={() => setSelectedMode(null)} />;
-      case 'consulta_simple':
-        // Ahora usará el componente que importamos del otro archivo
-        return <SimpleChatInterface />;
+    
       case 'flujo_investigacion':
         return <div><h2>Modo "Flujo de Investigación" - En Construcción</h2></div>;
+        
       case 'analista_datos':
         return <div><h2>Modo "Analista de Datos" - En Construcción</h2></div>;
       default:
