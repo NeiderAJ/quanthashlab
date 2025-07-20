@@ -26,11 +26,14 @@ jobs:
 
       # --- ¡NUEVO PASO! ---
       - name: Create Firebase config file
-        run: |
+        env: # 1. Ponemos el secreto en una variable de entorno del paso
+          FIREBASE_CONFIG: ${{ secrets.VITE_FIREBASE_CONFIG }}
+        run: | # 2. Usamos un script multilínea para más control
           echo "import { initializeApp } from 'firebase/app';" > src/firebase/config.js
           echo "import { getAuth } from 'firebase/auth';" >> src/firebase/config.js
           echo "import { getFirestore } from 'firebase/firestore';" >> src/firebase/config.js
-          echo "const firebaseConfig = ${{ secrets.VITE_FIREBASE_CONFIG }};" >> src/firebase/config.js
+          # 3. Imprimimos la constante y luego el contenido de la variable de entorno
+          echo "const firebaseConfig = ${FIREBASE_CONFIG};" >> src/firebase/config.js
           echo "const app = initializeApp(firebaseConfig);" >> src/firebase/config.js
           echo "export const auth = getAuth(app);" >> src/firebase/config.js
           echo "export const db = getFirestore(app);" >> src/firebase/config.js
