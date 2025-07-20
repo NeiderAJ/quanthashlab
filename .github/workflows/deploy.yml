@@ -1,15 +1,10 @@
-# .github/workflows/deploy.yml
-
 name: Deploy to GitHub Pages
 
 on:
-  # Se activa cada vez que haces un 'push' a la rama 'main'
   push:
     branches: [main]
-  # Permite ejecutar este workflow manualmente desde la pestaña Actions
   workflow_dispatch:
 
-# Permisos para que la Action pueda escribir en la rama de despliegue
 permissions:
   contents: read
   pages: write
@@ -28,8 +23,21 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
+
+      # --- ¡NUEVO PASO! ---
+      - name: Create Firebase config file
+        run: |
+          echo "import { initializeApp } from 'firebase/app';" > src/firebase/config.js
+          echo "import { getAuth } from 'firebase/auth';" >> src/firebase/config.js
+          echo "import { getFirestore } from 'firebase/firestore';" >> src/firebase/config.js
+          echo "const firebaseConfig = ${{ secrets.VITE_FIREBASE_CONFIG }};" >> src/firebase/config.js
+          echo "const app = initializeApp(firebaseConfig);" >> src/firebase/config.js
+          echo "export const auth = getAuth(app);" >> src/firebase/config.js
+          echo "export const db = getFirestore(app);" >> src/firebase/config.js
+      
       - name: Build
         run: npm run build
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
