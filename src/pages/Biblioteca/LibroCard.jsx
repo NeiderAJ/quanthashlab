@@ -18,7 +18,7 @@ const LibroCard = ({ libro }) => {
         <p className="libro-autor">{autor}</p>
         <p className="libro-descripcion">{descripcion}</p>
         <a 
-          href={pdf} 
+          href={publicUrl(pdf)} 
           download 
           className="libro-descargar-btn"
           target="_blank" // Abre el PDF en una nueva pestaña (opcional, pero recomendado)
