@@ -8,6 +8,9 @@ import './Roadmap.css';
 // Importamos los estilos de LecturaDetalle para reutilizar los botones y el layout general
 import '../Lecturas/LecturaDetalle.css'; 
 
+import { publicUrl } from '../../utils/paths';
+
+
 const RoadmapPage = () => {
   const [theme, setTheme] = useState('light'); // Estado para el tema, 'light' por defecto
   const navigate = useNavigate(); // Hook para la navegación
@@ -36,7 +39,7 @@ const RoadmapPage = () => {
       case 'blockquote': return <blockquote key={index} className="roadmap-blockquote">{block.content}</blockquote>;
       case 'download_button': return (
         <div key={index} className="download-wrapper">
-          <a href={block.path} download className="content-download-btn">{block.label}</a>
+          <a href={publicUrl(block.path)} download className="content-download-btn">{block.label}</a>
         </div>
       );
       default: return null;
