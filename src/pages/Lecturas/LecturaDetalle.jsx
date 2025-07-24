@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import lecturasData from './data/lecturasData';
 import { InlineMath, BlockMath } from 'react-katex'; // Importamos el componente de KaTeX
 import './LecturaDetalle.css'; // Crearemos este archivo de estilos a continuación
-import { publicUrl } from '../../utils/paths';
+import { publicUrl } from '../../../utils/paths';
 
 
 const LecturaDetalle = () => {
