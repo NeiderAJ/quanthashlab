@@ -27,9 +27,9 @@ const Navbar = () => {
       <Link className="navbar-link" to="/lecturas">Lecturas Quant</Link>      
       <Link className="navbar-link" to="/simulaciones">Simulaciones</Link>
        {/* --- ENLACES OCULTOS --- */}
-      /*<Link className="navbar-link" to="/academia">Academia Crypto</Link>*/
-     /* <Link className="navbar-link" to="/econofisica">EconoFísica</Link>*/
-      /*<Link className="navbar-link" to="/nosotros">Founders</Link>*/
+      {/*<Link className="navbar-link" to="/academia">Academia Crypto</Link>*/}
+     {/* <Link className="navbar-link" to="/econofisica">EconoFísica</Link>*/}
+      {/*<Link className="navbar-link" to="/nosotros">Founders</Link>*/}
       <Link className="navbar-link" to="/analyzer">AI Analyzer</Link>
       
       {/* --- 3. RENDERIZADO CONDICIONAL --- */}
