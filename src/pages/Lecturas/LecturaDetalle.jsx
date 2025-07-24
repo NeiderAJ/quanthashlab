@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import lecturasData from './data/lecturasData';
 import { InlineMath, BlockMath } from 'react-katex'; // Importamos el componente de KaTeX
 import './LecturaDetalle.css'; // Crearemos este archivo de estilos a continuación
+import { publicUrl } from '../../utils/paths';
 
 
 const LecturaDetalle = () => {
@@ -83,7 +84,7 @@ return (
       case 'download_button':
         return (
           <div key={index} className="download-wrapper">
-            <a href={block.path} download className="content-download-btn">
+            <a href={publicUrl(block.path)} download className="content-download-btn">
               {block.label}
             </a>
           </div>
